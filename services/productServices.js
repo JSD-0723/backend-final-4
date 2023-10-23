@@ -61,7 +61,7 @@ const generateProductResponse = async (product) => {
  * @returns {Promise<{products: object[], count: number}>} An object containing an array of products and the total count.
  */
 const fetchProductsWithCount = async (options) => {
-  const products = await Product.findAll({
+  const { count, rows } = await Product.findAndCountAll({
     ...options,
     include: [
       { model: Category, attributes: ['name'] },
@@ -69,10 +69,9 @@ const fetchProductsWithCount = async (options) => {
       { model: Discount, attributes: ['description', 'discountPercentage'] },
     ],
   });
-  const count = await Product.count({ where: options.where });
 
   // Transform the products data to include category name, brand name, and discount description/percentage
-  const transformedProducts = products.map(async (product) => {
+  const transformedProducts = rows.map(async (product) => {
     // Get the totalRating and ratingCount
     return await generateProductResponse(product);
   });

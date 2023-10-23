@@ -1,11 +1,5 @@
 // Import necessary modules and dependencies
-const {
-  Product,
-  RatingReview,
-  Discount,
-  Category,
-  Brand,
-} = require('../models');
+const { Product, RatingReview } = require('../models');
 const { asyncWrapper } = require('../middleware');
 const { createCustomError } = require('../utils/errors/custom-error');
 const { Op } = require('sequelize');
@@ -181,21 +175,7 @@ const getProduct = asyncWrapper(async (req, res, next) => {
   // Extract product ID from request parameters
   const id = Number(req.params.id);
 
-  const product = await ProductService.fetchProductById(id, {
-    include: [
-      { model: Discount, attributes: ['description', 'discountPercentage'] },
-      { model: Category, attributes: ['name'] },
-      { model: Brand, attributes: ['name'] },
-    ],
-  });
-  // Find the product by ID in the database
-  // const product = await Product.findByPk(id, {
-  //   include: [
-  //     { model: Discount, attributes: ["description", "discountPercentage"] },
-  //     { model: Category, attributes: ["name"] },
-  //     { model: Brand, attributes: ["name"] },
-  //   ],
-  // });
+  const product = await ProductService.fetchProductById(id);
 
   // If the product is found, fetch all ratingReviews associated with the product
   if (product) {
