@@ -12,6 +12,7 @@ const Brand = require('./brandModel');
 const Discount = require('./discountModel');
 const WishList = require('./wishListModel');
 const WishListItem = require('./wishListItemModel');
+const Tax = require('./taxModel');
 
 
 module.exports = {
@@ -28,5 +29,6 @@ module.exports = {
   Brand,
   Discount,
   WishList,
-  WishListItem
+  WishListItem,
+  Tax
 };

@@ -12,6 +12,8 @@ const orderData = require('./orderSeeder');
 const orderItemData = require('./orderItemSeeder');
 const wishListData = require('./wishListSeeder');
 const wishListItemData = require('./wishListItemSeeder');
+const taxData = require('./taxSeeder');
+
 
 
 
@@ -29,5 +31,6 @@ module.exports = {
     orderData,
     orderItemData,
     wishListData,
-    wishListItemData
+    wishListItemData,
+    taxData
 };
