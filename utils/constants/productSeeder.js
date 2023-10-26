@@ -10,7 +10,6 @@ module.exports = [
         'imageUrl': 'https://example.com/classic-watch.jpg',
         'categoryId': 2,
         'brandId': 1,
-        'discountId': 3
     },
     {
         'id': 2,
@@ -23,7 +22,6 @@ module.exports = [
         'imageUrl': 'https://example.com/leather-handbag.jpg',
         'categoryId': 1,
         'brandId': 2,
-        'discountId': 1
     },
     {
         'id': 3,
@@ -36,7 +34,6 @@ module.exports = [
         'imageUrl': 'https://example.com/aviator-sunglasses.jpg',
         'categoryId': 3,
         'brandId': 3,
-        'discountId': 2
     },
     {
         'id': 4,
@@ -49,7 +46,6 @@ module.exports = [
         'imageUrl': 'https://example.com/fedora-hat.jpg',
         'categoryId': 4,
         'brandId': 1,
-        'discountId': 2
     },
     {
         'id': 5,
@@ -62,7 +58,6 @@ module.exports = [
         'imageUrl': 'https://example.com/diamond-necklace.jpg',
         'categoryId': 5,
         'brandId': 2,
-        'discountId': 1
     },
     {
         'id': 6,
@@ -75,7 +70,6 @@ module.exports = [
         'imageUrl': 'https://example.com/stylish-backpack.jpg',
         'categoryId': 1,
         'brandId': 3,
-        'discountId': 2
     },
     {
         'id': 7,
@@ -88,7 +82,6 @@ module.exports = [
         'imageUrl': 'https://example.com/silver-bracelet.jpg',
         'categoryId': 5,
         'brandId': 1,
-        'discountId': 3
     },
     {
         'id': 8,
@@ -101,7 +94,6 @@ module.exports = [
         'imageUrl': 'https://example.com/wide-brim-hat.jpg',
         'categoryId': 4,
         'brandId': 2,
-        'discountId': 2
     },
     {
         'id': 9,
@@ -114,7 +106,6 @@ module.exports = [
         'imageUrl': 'https://example.com/gold-earrings.jpg',
         'categoryId': 5,
         'brandId': 3,
-        'discountId': 1
     },
     {
         'id': 10,
@@ -127,7 +118,6 @@ module.exports = [
         'imageUrl': 'https://example.com/modern-wristwatch.jpg',
         'categoryId': 2,
         'brandId': 1,
-        'discountId': 1
     },
     {
         'id': 11,
@@ -140,7 +130,6 @@ module.exports = [
         'imageUrl': 'https://example.com/canvas-tote-bag.jpg',
         'categoryId': 1,
         'brandId': 2,
-        'discountId': 2
     },
     {
         'id': 12,
@@ -153,7 +142,6 @@ module.exports = [
         'imageUrl': 'https://example.com/sporty-backpack.jpg',
         'categoryId': 1,
         'brandId': 3,
-        'discountId': 3
     },
     {
         'id': 13,
@@ -166,7 +154,6 @@ module.exports = [
         'imageUrl': 'https://example.com/pearl-necklace.jpg',
         'categoryId': 5,
         'brandId': 1,
-        'discountId': 1
     },
     {
         'id': 14,
@@ -179,7 +166,6 @@ module.exports = [
         'imageUrl': 'https://example.com/leather-wallet.jpg',
         'categoryId': 1,
         'brandId': 2,
-        'discountId': 2
     },
     {
         'id': 15,
@@ -192,7 +178,6 @@ module.exports = [
         'imageUrl': 'https://example.com/retro-sunglasses.jpg',
         'categoryId': 3,
         'brandId': 3,
-        'discountId': 3
     },
     {
         'id': 16,
@@ -205,7 +190,6 @@ module.exports = [
         'imageUrl': 'https://example.com/silver-cuff-bracelet.jpg',
         'categoryId': 5,
         'brandId': 1,
-        'discountId': 2
     },
     {
         'id': 17,
@@ -218,7 +202,6 @@ module.exports = [
         'imageUrl': 'https://example.com/panama-hat.jpg',
         'categoryId': 4,
         'brandId': 2,
-        'discountId': 1
     },
     {
         'id': 18,
@@ -231,7 +214,6 @@ module.exports = [
         'imageUrl': 'https://example.com/rose-gold-earrings.jpg',
         'categoryId': 5,
         'brandId': 3,
-        'discountId': 3
     },
     {
         'id': 19,
@@ -244,7 +226,6 @@ module.exports = [
         'imageUrl': 'https://example.com/minimalist-wristwatch.jpg',
         'categoryId': 2,
         'brandId': 1,
-        'discountId': 2
     },
     {
         'id': 20,
@@ -257,7 +238,6 @@ module.exports = [
         'imageUrl': 'https://example.com/crystal-pendant-necklace.jpg',
         'categoryId': 5,
         'brandId': 2,
-        'discountId': 1
     },
 
     {
@@ -271,7 +251,6 @@ module.exports = [
         'imageUrl': 'https://example.com/leather-crossbody-bag.jpg',
         'categoryId': 1,
         'brandId': 3,
-        'discountId': 3
     },
     {
         'id': 22,
@@ -284,7 +263,6 @@ module.exports = [
         'imageUrl': 'https://example.com/diamond-stud-earrings.jpg',
         'categoryId': 5,
         'brandId': 1,
-        'discountId': 1
     },
     {
         'id': 23,
@@ -297,7 +275,6 @@ module.exports = [
         'imageUrl': 'https://example.com/laptop-backpack.jpg',
         'categoryId': 1,
         'brandId': 2,
-        'discountId': 3
     },
     {
         'id': 24,
@@ -310,7 +287,6 @@ module.exports = [
         'imageUrl': 'https://example.com/gold-link-bracelet.jpg',
         'categoryId': 5,
         'brandId': 3,
-        'discountId': 2
     },
     {
         'id': 25,
@@ -323,6 +299,5 @@ module.exports = [
         'imageUrl': 'https://example.com/classic-aviator-sunglasses.jpg',
         'categoryId': 3,
         'brandId': 1,
-        'discountId': 3
     }
 ];

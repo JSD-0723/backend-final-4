@@ -1,4 +1,4 @@
-const { Product, Category, Brand, Discount } = require('../models');
+const { Product, Category, Brand } = require('../models');
 const { development } = require('../config/config');
 const { Op } = require('sequelize');
 
@@ -47,10 +47,6 @@ const generateProductResponse = async (product) => {
     brand: product.brand.name, // Access the brand name
     totalRating,
     ratingCount,
-    discount: {
-      description: product.discount.description, // Access the discount description
-      percentage: product.discount.discountPercentage, // Access the discount percentage
-    },
   };
 };
 
@@ -66,12 +62,11 @@ const fetchProductsWithCount = async (options) => {
     include: [
       { model: Category, attributes: ['name'] },
       { model: Brand, attributes: ['name'] },
-      { model: Discount, attributes: ['description', 'discountPercentage'] },
     ],
   });
   const count = await Product.count({ where: options.where });
 
-  // Transform the products data to include category name, brand name, and discount description/percentage
+  // Transform the products data to include category name and brand name
   const transformedProducts = products.map(async (product) => {
     // Get the totalRating and ratingCount
     return await generateProductResponse(product);

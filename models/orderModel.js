@@ -6,6 +6,7 @@ const Address = require('./addressModel');
 const Payment = require('./paymentModel');
 const User = require('./userModel');
 const Tax = require('./taxModel');
+const Discount = require('./discountModel');
 
 
 // Order Model
@@ -95,6 +96,15 @@ const Order = sequelize.define(
         key: 'id',
       },
     },
+    discountId: {
+      type: DataTypes.INTEGER(15),
+      allowNull: true,
+      references: {
+        model: Discount,
+        key: 'id',
+        onDelete: 'CASCADE',
+      },
+    },
   },
   {
     freezeTableName: true,
@@ -118,6 +128,8 @@ Order.belongsTo(Cart, { onDelete: 'cascade', hooks: true }, { foreignKeys: 'cart
 Payment.hasMany(Order, { foreignKeys: 'paymentId' });
 Order.belongsTo(Payment, { onDelete: 'cascade', hooks: true }, { foreignKeys: 'paymentId' });
 
+Discount.hasMany(Order, { foreignKey: 'discountId' });
+Order.belongsTo(Discount, { onDelete: 'cascade', hooks: true }, { foreignKey: 'discountId' });
 
 // exports
 module.exports = Order;

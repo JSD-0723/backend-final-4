@@ -9,7 +9,8 @@ module.exports = [
         'paymentId': 1,
         'cartId': 1,
         'userId': 2,
-        'addressId': 1
+        'addressId': 1,
+        'discountId': 1
     },
     {
         'id': 2,
@@ -21,7 +22,8 @@ module.exports = [
         'paymentId': 2,
         'cartId': 2,
         'userId': 3,
-        'addressId': 2
+        'addressId': 2,
+        'discountId': 2
     },
     {
         'id': 3,
@@ -33,7 +35,8 @@ module.exports = [
         'paymentId': 3,
         'cartId': 1,
         'userId': 2,
-        'addressId': 3
+        'addressId': 3,
+        'discountId': 3
     },
     {
         'id': 4,
@@ -45,7 +48,8 @@ module.exports = [
         'paymentId': 4,
         'cartId': 1,
         'userId': 2,
-        'addressId': 4
+        'addressId': 4,
+        'discountId': 1
     },
     {
         'id': 5,
@@ -57,6 +61,7 @@ module.exports = [
         'paymentId': 5,
         'cartId': 2,
         'userId': 3,
-        'addressId': 5
+        'addressId': 5,
+        'discountId': 2
     },
 ];

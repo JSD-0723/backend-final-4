@@ -2,7 +2,6 @@ const DataTypes = require('sequelize');
 const sequelize = require('../utils/dataBaseConnection');
 const Category = require('./categoryModel');
 const Brand = require('./brandModel');
-const Discount = require('./discountModel');
 
 const Product = sequelize.define(
   'product',
@@ -111,15 +110,6 @@ const Product = sequelize.define(
         onDelete: 'CASCADE',
       },
     },
-    discountId: {
-      type: DataTypes.INTEGER(15),
-      allowNull: true,
-      references: {
-        model: Discount,
-        key: 'id',
-        onDelete: 'CASCADE',
-      },
-    },
   },
   {
     freezeTableName: true,
@@ -141,13 +131,6 @@ Product.belongsTo(
   { foreignKey: 'brandId' }
 );
 Brand.hasMany(Product, { foreignKey: 'brandId' });
-
-Product.belongsTo(
-  Discount,
-  { onDelete: 'cascade', hooks: true },
-  { foreignKey: 'discountId' }
-);
-Discount.hasMany(Product, { foreignKey: 'discountId' });
 
 // Hooks
 
