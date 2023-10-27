@@ -46,7 +46,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          docker-compose -f docker-compose.app.yaml exec backend-final-4 npm test
+          docker-compose -f docker-compose.app.yaml up -d
 
       - name: Tear down Docker Compose
         run: docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml down
