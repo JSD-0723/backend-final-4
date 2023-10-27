@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # MySQL database service
+  db:
+    hostname: db
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_DATABASE=finalproject4db
+    networks:
+      - backend-final
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "phpmyadmin" ]
+      timeout: 40s
+      retries: 10
+      interval: 5s
+
+  # phpMyAdmin service
+  phpmyadmin:
+    hostname: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=
+    ports:
+      - "8080:80"
+    networks:
+      - backend-final
+    links:
+      - db
+
+networks:
+  backend-final:
+    driver: bridge

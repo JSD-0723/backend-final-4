@@ -2,7 +2,6 @@
 const {
   Product,
   RatingReview,
-  Discount,
   Category,
   Brand,
 } = require('../models');
@@ -29,7 +28,6 @@ const createProduct = asyncWrapper(async (req, res, next) => {
     imageUrl,
     categoryId,
     brandId,
-    discountId,
   } = req.body;
 
   const existProduct = await Product.findOne({
@@ -43,7 +41,6 @@ const createProduct = asyncWrapper(async (req, res, next) => {
       // imageUrl,
       categoryId,
       brandId,
-      // discountId,
     },
   });
 
@@ -62,7 +59,6 @@ const createProduct = asyncWrapper(async (req, res, next) => {
     imageUrl,
     categoryId,
     brandId,
-    discountId,
   });
 
   // Log the created product and send a success response
@@ -183,7 +179,6 @@ const getProduct = asyncWrapper(async (req, res, next) => {
 
   const product = await ProductService.fetchProductById(id, {
     include: [
-      { model: Discount, attributes: ['description', 'discountPercentage'] },
       { model: Category, attributes: ['name'] },
       { model: Brand, attributes: ['name'] },
     ],
@@ -191,7 +186,6 @@ const getProduct = asyncWrapper(async (req, res, next) => {
   // Find the product by ID in the database
   // const product = await Product.findByPk(id, {
   //   include: [
-  //     { model: Discount, attributes: ["description", "discountPercentage"] },
   //     { model: Category, attributes: ["name"] },
   //     { model: Brand, attributes: ["name"] },
   //   ],

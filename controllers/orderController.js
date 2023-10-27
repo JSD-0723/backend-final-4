@@ -1,5 +1,5 @@
 // imports
-const { Cart, Order, OrderItem } = require('../models');
+const { Cart, Order, OrderItem, Discount, Tax } = require('../models');
 const { asyncWrapper } = require('../middleware');
 const { createCustomError } = require('../utils/errors/custom-error');
 const {
@@ -55,10 +55,12 @@ const createOrder = asyncWrapper(async (req, res, next) => {
   const userId = req.body.userId; // Changed later to fetch from the jwt token
   const cartId = Number(req.body.cartId); // Changed later based on requirements
   const { status, date } = req.body;
-  const tax = 0;
+  const taxId = Number(req.body.taxId);
   const deliveryFee = development.deliveryFee;
   const paymentId = Number(req.body.paymentId);
   const addressId = Number(req.body.addressId);
+  const discountId = Number(req.body.discountId);
+
 
   // find the cart and the products I want to add to the order
   const cart = await Cart.findByPk(cartId); // cartId is the same as the userId (incase of cartId is changed to multiple)
@@ -70,20 +72,22 @@ const createOrder = asyncWrapper(async (req, res, next) => {
 
   // Call the function to update product stock in the cart
   await updateProductStockInCart(cartId);
-
+  const tax = await Tax.findByPk(taxId); 
+  
   // updating the total price of order based on the taxes and delivery fees
-  const totalPrice = Number(cart.totalPrice) + tax + deliveryFee;
+  const totalPrice = Number(cart.totalPrice) + Number(tax.taxRate) + deliveryFee;
   // creating the order
   const order = await Order.create({
     totalPrice,
     date,
     status,
-    tax,
+    taxId,
     deliveryFee,
     paymentId,
     cartId,
     userId,
     addressId,
+    discountId,
   });
 
   // creating the order items

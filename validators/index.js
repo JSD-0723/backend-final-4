@@ -9,6 +9,8 @@ const productValidator = require('./productValidator');
 const ratingReviewsValidator = require('./ratingReviewValidator');
 const userValidator = require('./userValidator');
 const wishListValidator = require('./wishListValidator');
+const taxValidator = require('./taxValidator');
+
 
 module.exports = {
   addressValidator,
@@ -22,4 +24,5 @@ module.exports = {
   ratingReviewsValidator,
   userValidator,
   wishListValidator,
+  taxValidator,
 };

@@ -20,12 +20,12 @@ const productValidationRules = () => {
     )
       .isInt({ min: 0 })
       .notEmpty(),
-    body('totalRating', 'totalRating must be an number between 0 and 5')
-      .isDecimal({ min: 0, max: 5 })
-      .notEmpty(),
-    body('ratingCount', 'totalRating must be an number between 0 and 5')
-      .isNumeric({ min: 0 })
-      .notEmpty(),
+    // body('totalRating', 'totalRating must be an number between 0 and 5')
+    //   .isDecimal({ min: 0, max: 5 })
+    //   .notEmpty(),
+    // body('ratingCount', 'totalRating must be an number between 0 and 5')
+    //   .isNumeric({ min: 0 })
+    //   .notEmpty(),
     body('imageUrl', 'Image url must be a url with max limit of 255 characters')
       .isURL()
       .notEmpty()

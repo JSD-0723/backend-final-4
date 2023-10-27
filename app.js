@@ -21,6 +21,7 @@ const {
   brandRoutes,
   discountRoutes,
   wishListRoutes,
+  taxRoutes,
 } = require('./routes');
 
 // CORS Middleware
@@ -44,6 +45,8 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/brands', brandRoutes);
 app.use('/api/discounts', discountRoutes);
 app.use('/api/wishlists', wishListRoutes);
+app.use('/api/taxes',taxRoutes);
+
 
 // eslint-disable-next-line no-undef
 app.use('/static', express.static(path.join(__dirname, 'public')));
