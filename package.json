@@ -4,8 +4,8 @@
   "description": "This is the final project backend repo",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon --inspect=0.0.0.0:9229 app.js",
-    "test": "jest --ci"
+    "start": "nodemon app.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
