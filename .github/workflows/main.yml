@@ -1,3 +1,4 @@
+# main.yaml
 name: Build and publish Docker image
 
 on:
@@ -41,11 +42,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Docker Compose
-        run: docker-compose -f docker-compose.app.yaml up -d
+        run: docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml up -d
 
       - name: Run Tests
         run: |
           docker-compose -f docker-compose.app.yaml exec backend-final-4 npm test
 
       - name: Tear down Docker Compose
-        run: docker-compose -f docker-compose.app.yaml down
+        run: docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml down
