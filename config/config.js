@@ -9,6 +9,7 @@ module.exports = {
     host: process.env.DB_HOST,
     dialect: 'mysql',
     jwt_secret: process.env.JWT_SECRET,
+    charset: 'utf8mb4',
     deliveryFee: 12,
     itemsPerPage: 20,
     newArrivalMonths: 3,
