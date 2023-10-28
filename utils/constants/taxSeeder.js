@@ -161,5 +161,5 @@ module.exports = [
       'countryName': 'Austria',
       'taxRate': 5.0,
     },
-]
+];
   
