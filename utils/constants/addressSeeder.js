@@ -1,7 +1,7 @@
 module.exports = [
     {
         'id': 1,
-        'street': '123 Main St',
+        'street': '1234 Main St',
         'postalCode': '12345',
         'state': 'California',
         'city': 'Los Angeles',
