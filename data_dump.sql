@@ -32,7 +32,7 @@ CREATE TABLE `address` (
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`),
   CONSTRAINT `address_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `address` (
 
 LOCK TABLES `address` WRITE;
 /*!40000 ALTER TABLE `address` DISABLE KEYS */;
-INSERT INTO `address` VALUES (1,'123 Main St','12345','California','Los Angeles',1),(2,'456 Oak St','67890','New York','New York City',1),(3,'789 Pine St','54321','Texas','Houston',1),(4,'101 Maple Ave','98765','Florida','Miami',2),(5,'202 Cedar Blvd','23456','Illinois','Chicago',2),(6,'303 Pine Ln','87654','Arizona','Phoenix',3),(7,'123 Main St','12345','CA','Los Angeles',1),(8,'123 Main St','12345','CA','Los Angeles',1),(9,'123 Main St','12345','CA','Los Angeles',1),(10,'123 Main St','12345','CA','Los Angeles',1),(11,'123 Main St','12345','CA','Los Angeles',1),(12,'123 Main St','12345','CA','Los Angeles',1),(13,'123 Main St','12345','CA','Los Angeles',1),(14,'123 Main St','12345','CA','Los Angeles',1);
+INSERT INTO `address` VALUES (1,'123 Main St','12345','California','Los Angeles',1),(2,'456 Oak St','67890','New York','New York City',1),(3,'789 Pine St','54321','Texas','Houston',1),(4,'101 Maple Ave','98765','Florida','Miami',2),(5,'202 Cedar Blvd','23456','Illinois','Chicago',2),(6,'303 Pine Ln','87654','Arizona','Phoenix',3);
 /*!40000 ALTER TABLE `address` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -362,7 +362,7 @@ CREATE TABLE `tax` (
   `countryName` varchar(50) NOT NULL,
   `taxRate` decimal(10,2) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -371,6 +371,7 @@ CREATE TABLE `tax` (
 
 LOCK TABLES `tax` WRITE;
 /*!40000 ALTER TABLE `tax` DISABLE KEYS */;
+INSERT INTO `tax` VALUES (1,'US','United States',7.50),(2,'CA','Canada',5.00),(3,'UK','United Kingdom',6.00),(4,'FR','France',5.50),(5,'DE','Germany',7.00),(6,'AU','Australia',10.00),(7,'JP','Japan',8.00),(8,'IT','Italy',6.00),(9,'BR','Brazil',12.50),(10,'IN','India',18.00),(11,'CN','China',13.50),(12,'MX','Mexico',16.00),(13,'RU','Russia',15.00),(14,'ES','Spain',7.50),(15,'KR','South Korea',9.00),(16,'SA','Saudi Arabia',5.50),(17,'ZA','South Africa',10.50),(18,'NL','Netherlands',6.00),(19,'SE','Sweden',7.00),(20,'SG','Singapore',7.50),(21,'TH','Thailand',7.00),(22,'AR','Argentina',8.50),(23,'EG','Egypt',9.00),(24,'TR','Turkey',8.00),(25,'CH','Switzerland',7.00),(26,'BE','Belgium',6.00),(27,'AT','Austria',5.00);
 /*!40000 ALTER TABLE `tax` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -470,4 +471,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-28 19:39:23
+-- Dump completed on 2023-10-28 20:49:59
