@@ -26,10 +26,10 @@ jobs:
       - name: Tear down Docker Compose
         run: docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml down
 
-      - name: Upload Data Dump to Clever Cloud
+      - name: Import Data into Clever Cloud Database
         run: |
           # Use mysql command to import data into Clever Cloud database
-          mysql -h${CLEVER_CLOUD_DB_HOST} -u${CLEVER_CLOUD_DB_USER} -p${CLEVER_CLOUD_DB_PASSWORD} ${CLEVER_CLOUD_DB_NAME} < $GITHUB_WORKSPACE/data_dump.sql
+          mysql -h$CLEVER_CLOUD_DB_HOST -u$CLEVER_CLOUD_DB_USER -p$CLEVER_CLOUD_DB_PASSWORD $CLEVER_CLOUD_DB_NAME < $GITHUB_WORKSPACE/data_dump.sql
         env:
           CLEVER_CLOUD_DB_HOST: ${{ secrets.CLEVER_CLOUD_DB_HOST }}
           CLEVER_CLOUD_DB_USER: ${{ secrets.CLEVER_CLOUD_DB_USER }}
