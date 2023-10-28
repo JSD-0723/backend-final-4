@@ -20,17 +20,6 @@ jobs:
       - name: Seed Data into Clever Cloud Database
         run: |
           docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml run --rm app npx sequelize-cli db:seed:all
-          
-      - name: Import Data into Clever Cloud Database
-        run: |
-          # Optionally, perform any other necessary steps after seeding if needed
-          # ...
-
-        env:
-          CLEVER_CLOUD_DB_HOST: ${{ secrets.CLEVER_CLOUD_DB_HOST }}
-          CLEVER_CLOUD_DB_USER: ${{ secrets.CLEVER_CLOUD_DB_USER }}
-          CLEVER_CLOUD_DB_PASSWORD: ${{ secrets.CLEVER_CLOUD_DB_PASSWORD }}
-          CLEVER_CLOUD_DB_NAME: ${{ secrets.CLEVER_CLOUD_DB_NAME }}
 
   push_to_registry:
     name: Push Docker image to Docker Hub
