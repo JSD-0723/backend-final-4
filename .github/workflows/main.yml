@@ -20,12 +20,14 @@ jobs:
         run: |
           docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml run --rm app npm test
 
-      - name: Restart Application
-        run: docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml restart app
-
       - name: Tear down Docker Compose
         run: docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml down
 
+      - name: Debug - Check File Path
+        run: |
+          echo "File Path: $GITHUB_WORKSPACE/data_dump.sql"
+          cat $GITHUB_WORKSPACE/data_dump.sql
+      
       - name: Import Data into Clever Cloud Database
         run: |
           # Use mysql command to import data into Clever Cloud database
@@ -35,6 +37,7 @@ jobs:
           CLEVER_CLOUD_DB_USER: ${{ secrets.CLEVER_CLOUD_DB_USER }}
           CLEVER_CLOUD_DB_PASSWORD: ${{ secrets.CLEVER_CLOUD_DB_PASSWORD }}
           CLEVER_CLOUD_DB_NAME: ${{ secrets.CLEVER_CLOUD_DB_NAME }}
+
 
   push_to_registry:
     name: Push Docker image to Docker Hub
