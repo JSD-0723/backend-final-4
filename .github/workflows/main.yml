@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    name: Run Jest Tests
+    name: Run Jest Tests and Update Data
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -19,6 +19,9 @@ jobs:
       - name: Run Jest Tests
         run: |
           docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml run --rm app npm test
+
+      - name: Restart Application
+        run: docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml restart app
 
       - name: Tear down Docker Compose
         run: docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml down
