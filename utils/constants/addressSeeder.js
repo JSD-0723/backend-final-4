@@ -17,7 +17,7 @@ module.exports = [
     },
     {
         'id': 3,
-        'street': '789 Pine St',
+        'street': '711 Pine St',
         'postalCode': '54321',
         'state': 'Texas',
         'city': 'Houston',
