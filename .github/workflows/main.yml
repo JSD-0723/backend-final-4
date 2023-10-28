@@ -13,15 +13,15 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
 
-      - name: Set up Docker Compose
-        run: docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml up -d
+      #- name: Set up Docker Compose
+       # run: docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml up -d
 
-      #=- name: Run Jest Tests
-       # run: |
-        #  docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml run --rm app npm test
+      - name: Run Jest Tests
+        run: |
+          docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml run --rm app npm test
 
-      #- name: Tear down Docker Compose
-       # run: docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml down
+      - name: Tear down Docker Compose
+        run: docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml down
       
       - name: Import Data into Clever Cloud Database
         run: |
