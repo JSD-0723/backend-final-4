@@ -20,12 +20,6 @@ const productValidationRules = () => {
     )
       .isInt({ min: 0 })
       .notEmpty(),
-    // body('totalRating', 'totalRating must be an number between 0 and 5')
-    //   .isDecimal({ min: 0, max: 5 })
-    //   .notEmpty(),
-    // body('ratingCount', 'totalRating must be an number between 0 and 5')
-    //   .isNumeric({ min: 0 })
-    //   .notEmpty(),
     body('imageUrl', 'Image url must be a url with max limit of 255 characters')
       .isURL()
       .notEmpty()
@@ -71,14 +65,6 @@ const productOptionalRules = () => {
       .optional()
       .isInt({ min: 0 })
       .notEmpty(),
-    body('totalRating', 'totalRating must be an number between 0 and 5')
-      .optional()
-      .isDecimal({ min: 0, max: 5 })
-      .notEmpty(),
-    body('ratingCount', 'totalRating must be an number between 0 and 5')
-      .optional()
-      .isNumeric({ min: 0 })
-      .notEmpty(),
     body('imageUrl', 'Image url must be a url with max limit of 255 characters')
       .optional()
       .isURL()
@@ -102,7 +88,7 @@ const productOptionalRules = () => {
   ];
 };
 
-// Category  query Validation rules
+// Product query Validation rules
 const productQueryRules = () => {
   return [
     query('page', 'page query must be boolean').default(1).isInt(),
@@ -117,9 +103,40 @@ const productQueryRules = () => {
   ];
 };
 
+// Product search Validation rules
+const productSearchRules = () => {
+  return [
+    query('keyword', 'keyword must be a string')
+      .optional()
+      .isString()
+      .notEmpty(),
+    query('categoryName', 'category name must be a string')
+      .optional()
+      .isString()
+      .notEmpty(),
+    query('brandName', 'Brand name must be a string')
+      .optional()
+      .isString()
+      .notEmpty(),
+    query('newArrival', 'newArrival query must be boolean')
+      .optional()
+      .default(false)
+      .isBoolean(),
+    query('limitedEdition', 'limitedEdition query must be boolean')
+      .optional()
+      .default(false)
+      .isBoolean(),
+    query('handpickedProducts', 'handpicked Products query must be boolean')
+      .optional()
+      .default(false)
+      .isBoolean(),
+  ];
+};
+
 // exports
 module.exports = {
   rules: productValidationRules,
   optionalRules: productOptionalRules,
   queryRules: productQueryRules,
+  searchRules: productSearchRules,
 };
