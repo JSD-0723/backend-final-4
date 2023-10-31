@@ -22,7 +22,7 @@ const getProductRatingSummary = async (product) => {
   const totalRating = Math.round(rating * 10) / 10;
   const ratingCount = reviews ? reviews.length : 0;
   return {
-    totalRating,
+    totalRating: totalRating ? totalRating : 0,
     ratingCount,
   };
 };
