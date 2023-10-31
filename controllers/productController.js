@@ -1,10 +1,5 @@
 // Import necessary modules and dependencies
-const {
-  Product,
-  RatingReview,
-  Category,
-  Brand,
-} = require('../models');
+const { Product, RatingReview, Category, Brand } = require('../models');
 const { asyncWrapper } = require('../middleware');
 const { createCustomError } = require('../utils/errors/custom-error');
 const { Op } = require('sequelize');
@@ -296,194 +291,83 @@ const deleteProduct = asyncWrapper(async (req, res, next) => {
  * @param {Object} res - Express response object.s
  */
 const searchProducts = asyncWrapper(async (req, res) => {
-  // Extract parameters from query
-  const keyword = req.query.keyword;
-  const categoryName = req.query.categoryName;
-  const brandName = req.query.brandName;
+  // Extract query
+  const {
+    keyword,
+    categoryName,
+    brandName,
+    // rating,
+    // ratingType,
+    newArrival,
+    limitedEdition,
+    handpickedProducts,
+  } = req.query;
 
-  // Initialize an empty search criteria
-  let searchCriteria = {};
+  // Build the search criteria object
+  const searchCriteria = {};
 
-  // Function to find category by name
-  const findCategory = async (name) => {
-    return await Category.findOne({
-      where: { name: name },
+  if (keyword) {
+    searchCriteria.title = { [Op.like]: `%${keyword}%` };
+  }
+
+  if (categoryName) {
+    searchCriteria['$Category.name$'] = categoryName;
+  }
+
+  if (brandName) {
+    searchCriteria['$Brand.name$'] = brandName;
+  }
+
+  // if (rating && ratingType) {
+  //   searchCriteria.rating =
+  //     ratingType === 'true' ? { [Op.gte]: rating } : { [Op.lte]: rating };
+  // }
+
+  if (newArrival) {
+    const nthMonthAgo = new Date();
+    nthMonthAgo.setMonth(nthMonthAgo.getMonth() - development.newArrivalMonths);
+    searchCriteria.createdAt = {
+      [Op.gte]: nthMonthAgo,
+    };
+  }
+
+  if (limitedEdition) {
+    searchCriteria.availableInStock = { [Op.lt]: 20 };
+  }
+
+  if (handpickedProducts) {
+    console.log(searchCriteria);
+    searchCriteria.price = { [Op.lte]: development.handPickedPrice };
+
+    const products = await ProductService.fetchProducts({
+      where: searchCriteria,
     });
-  };
 
-  // Function to find brand by name
-  const findBrand = async (name) => {
-    return await Brand.findOne({
-      where: { name: name },
-    });
-  };
+    const handPickedProducts = products.filter((product) =>
+      product.totalRating ? product.totalRating >= 4.5 : undefined
+    );
 
-  // Check if both keyword and category are provided
-  if (keyword && categoryName && brandName) {
-    const category = await findCategory(categoryName);
-    const brand = await findBrand(brandName);
-
-    // Check if the category and brand exist
-    if (!category) {
-      return res.status(400).json({
-        success: false,
-        error: 'Category not found',
-      });
-    }
-
-    if (!brand) {
-      return res.status(400).json({
-        success: false,
-        error: 'Brand not found',
-      });
-    }
-
-    // Build search criteria for keyword, category, and brand
-    searchCriteria = {
-      where: {
-        [Op.and]: [
-          {
-            [Op.or]: [
-              { title: { [Op.like]: `%${keyword}%` } },
-              { description: { [Op.like]: `%${keyword}%` } },
-            ],
-          },
-          { categoryId: category.id },
-          { brandId: brand.id },
-        ],
-      },
-    };
-  } else if (keyword && categoryName) {
-    const category = await findCategory(categoryName);
-
-    // Check if the category exists
-    if (!category) {
-      return res.status(400).json({
-        success: false,
-        error: 'Category not found',
-      });
-    }
-
-    // Build search criteria for keyword and category
-    searchCriteria = {
-      where: {
-        [Op.and]: [
-          {
-            [Op.or]: [
-              { title: { [Op.like]: `%${keyword}%` } },
-              { description: { [Op.like]: `%${keyword}%` } },
-            ],
-          },
-          { categoryId: category.id },
-        ],
-      },
-    };
-  } else if (keyword && brandName) {
-    const brand = await findBrand(brandName);
-
-    // Check if the brand exists
-    if (!brand) {
-      return res.status(400).json({
-        success: false,
-        error: 'Brand not found',
-      });
-    }
-
-    // Build search criteria for keyword and brand
-    searchCriteria = {
-      where: {
-        [Op.or]: [
-          { title: { [Op.like]: `%${keyword}%` } },
-          { description: { [Op.like]: `%${keyword}%` } },
-        ],
-        brandId: brand.id,
-      },
-    };
-  } else if (categoryName && brandName) {
-    const category = await findCategory(categoryName);
-    const brand = await findBrand(brandName);
-
-    // Check if the category and brand exist
-    if (!category) {
-      return res.status(400).json({
-        success: false,
-        error: 'Category not found',
-      });
-    }
-
-    if (!brand) {
-      return res.status(400).json({
-        success: false,
-        error: 'Brand not found',
-      });
-    }
-
-    // Build search criteria for category and brand
-    searchCriteria = {
-      where: {
-        categoryId: category.id,
-        brandId: brand.id,
-      },
-    };
-  } else if (keyword) {
-    // Build search criteria for keyword only
-    searchCriteria = {
-      where: {
-        [Op.or]: [
-          { title: { [Op.like]: `%${keyword}%` } },
-          { description: { [Op.like]: `%${keyword}%` } },
-        ],
-      },
-    };
-  } else if (categoryName) {
-    const category = await findCategory(categoryName);
-
-    // Check if the category exists
-    if (!category) {
-      return res.status(400).json({
-        success: false,
-        error: 'Category not found',
-      });
-    }
-
-    // Build search criteria for category only
-    searchCriteria = {
-      where: {
-        categoryId: category.id,
-      },
-    };
-  } else if (brandName) {
-    const brand = await findBrand(brandName);
-
-    // Check if the brand exists
-    if (!brand) {
-      return res.status(400).json({
-        success: false,
-        error: 'Brand not found',
-      });
-    }
-
-    // Build search criteria for brand only
-    searchCriteria = {
-      where: {
-        brandId: brand.id,
-      },
-    };
-  } else {
-    // If none of the parameters is provided, return an error
-    return res.status(400).json({
-      success: false,
-      error: 'Keyword, category, or brand parameter is required for search',
+    console.log(
+      `Handpicked Products matching ${{
+        ...req.query,
+      }} have been called, products length= ${handPickedProducts.length}`
+    );
+    return res.status(200).json({
+      success: true,
+      message: 'Operation successful',
+      data: handPickedProducts,
     });
   }
 
-  // Search for products matching the criteria
-  const products = await Product.findAll(searchCriteria);
+  const products = await ProductService.fetchProducts({
+    where: searchCriteria,
+  });
 
   // Log the products matching the keyword, category, or brand, and send a response
   console.log(
-    `Products matching keyword '${keyword}', category '${categoryName}', brand '${brandName}'`,
-    products
+    `Products matching ${{ ...req.query }} have been called, products length= ${
+      products.length
+    }`
   );
   res.status(200).json({
     success: true,
@@ -491,7 +375,6 @@ const searchProducts = asyncWrapper(async (req, res) => {
     data: products,
   });
 });
-
 
 /**
  * Retrieves all ratingRevies for a product from the database.
