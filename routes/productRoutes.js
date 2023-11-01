@@ -22,7 +22,7 @@ router.get('/:id', getProduct);
 router.post('/', productValidator.rules(), validate, createProduct);
 router.put('/:id', productValidator.optionalRules(), validate, updateProduct);
 router.delete('/:id', deleteProduct);
-router.get('/v1/search', searchProducts);
+router.get('/v1/search', productValidator.searchRules(), searchProducts);
 router.get('/ratingreviews/:id', getProductRatingReviews);
 
 module.exports = router;

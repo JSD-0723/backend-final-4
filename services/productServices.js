@@ -22,7 +22,7 @@ const getProductRatingSummary = async (product) => {
   const totalRating = Math.round(rating * 10) / 10;
   const ratingCount = reviews ? reviews.length : 0;
   return {
-    totalRating,
+    totalRating: totalRating ? totalRating : 0,
     ratingCount,
   };
 };
@@ -82,6 +82,33 @@ const fetchProductsWithCount = async (options) => {
 };
 
 /**
+ * Fetch a list of products with additional information and rating summaries.
+ *
+ * @param {object} options - Options for querying products.
+ * @returns {Promise<{products: object[]}>} An object containing an array of products and the total count.
+ */
+const fetchProducts = async (options) => {
+  const products = await Product.findAll({
+    ...options,
+    include: [
+      { model: Category, attributes: ['name'] },
+      { model: Brand, attributes: ['name'] },
+    ],
+  });
+
+  // Transform the products data to include category name and brand name
+  const transformedProducts = products.map(async (product) => {
+    // Get the totalRating and ratingCount
+    return await generateProductResponse(product);
+  });
+
+  //   Wait for all promises to resolve
+  const responseData = await Promise.all(transformedProducts);
+
+  return responseData;
+};
+
+/**
  * Fetch a product by its ID and generate a structured response.
  *
  * @param {number} id - The ID of the product to fetch.
@@ -108,6 +135,7 @@ const fetchHandPickedProducts = async (options) => {
 };
 
 module.exports = {
+  fetchProducts,
   fetchProductsWithCount,
   fetchProductById,
   fetchHandPickedProducts,

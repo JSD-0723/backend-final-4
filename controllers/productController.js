@@ -1,10 +1,5 @@
 // Import necessary modules and dependencies
-const {
-  Product,
-  RatingReview,
-  Category,
-  Brand,
-} = require('../models');
+const { Product, RatingReview, Category, Brand } = require('../models');
 const { asyncWrapper } = require('../middleware');
 const { createCustomError } = require('../utils/errors/custom-error');
 const { Op } = require('sequelize');
@@ -296,36 +291,83 @@ const deleteProduct = asyncWrapper(async (req, res, next) => {
  * @param {Object} res - Express response object.s
  */
 const searchProducts = asyncWrapper(async (req, res) => {
-  // Extract keyword and category from query parameters
-  const keyword = req.query.keyword;
-  const categoryName = req.query.name;
+  // Extract query
+  const {
+    keyword,
+    categoryName,
+    brandName,
+    // rating,
+    // ratingType,
+    newArrival,
+    limitedEdition,
+    handpickedProducts,
+  } = req.query;
 
-  // Check if at least one of the parameters is provided
-  if (!keyword && !categoryName) {
-    return res.status(400).json({
-      success: false,
-      error: 'Keyword or category parameter is required for search',
+  // Build the search criteria object
+  const searchCriteria = {};
+
+  if (keyword) {
+    searchCriteria.title = { [Op.like]: `%${keyword}%` };
+  }
+
+  if (categoryName) {
+    searchCriteria['$Category.name$'] = categoryName;
+  }
+
+  if (brandName) {
+    searchCriteria['$Brand.name$'] = brandName;
+  }
+
+  // if (rating && ratingType) {
+  //   searchCriteria.rating =
+  //     ratingType === 'true' ? { [Op.gte]: rating } : { [Op.lte]: rating };
+  // }
+
+  if (newArrival) {
+    const nthMonthAgo = new Date();
+    nthMonthAgo.setMonth(nthMonthAgo.getMonth() - development.newArrivalMonths);
+    searchCriteria.createdAt = {
+      [Op.gte]: nthMonthAgo,
+    };
+  }
+
+  if (limitedEdition) {
+    searchCriteria.availableInStock = { [Op.lt]: 20 };
+  }
+
+  if (handpickedProducts) {
+    console.log(searchCriteria);
+    searchCriteria.price = { [Op.lte]: development.handPickedPrice };
+
+    const products = await ProductService.fetchProducts({
+      where: searchCriteria,
+    });
+
+    const handPickedProducts = products.filter((product) =>
+      product.totalRating ? product.totalRating >= 4.5 : undefined
+    );
+
+    console.log(
+      `Handpicked Products matching ${{
+        ...req.query,
+      }} have been called, products length= ${handPickedProducts.length}`
+    );
+    return res.status(200).json({
+      success: true,
+      message: 'Operation successful',
+      data: handPickedProducts,
     });
   }
 
-  // Define search criteria based on provided parameters
-  const searchCriteria = {
-    where: {
-      [Op.or]: [
-        { title: { [Op.like]: `%${keyword}%` } },
-        { description: { [Op.like]: `%${keyword}%` } },
-        { categoryId: { [Op.like]: `%${categoryName}%` } },
-      ],
-    },
-  };
+  const products = await ProductService.fetchProducts({
+    where: searchCriteria,
+  });
 
-  // Search for products matching the criteria
-  const products = await Product.findAll(searchCriteria);
-
-  // Log the products matching the keyword or category and send a response
+  // Log the products matching the keyword, category, or brand, and send a response
   console.log(
-    `Products matching keyword '${keyword}' or category '${categoryName}': `,
-    products
+    `Products matching ${{ ...req.query }} have been called, products length= ${
+      products.length
+    }`
   );
   res.status(200).json({
     success: true,
