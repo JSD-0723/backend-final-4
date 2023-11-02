@@ -296,8 +296,8 @@ const searchProducts = asyncWrapper(async (req, res) => {
     keyword,
     categoryName,
     brandName,
-    // rating,
-    // ratingType,
+    rating,
+    ratingType, // "above" or "less"
     newArrival,
     limitedEdition,
     handpickedProducts,
@@ -317,11 +317,6 @@ const searchProducts = asyncWrapper(async (req, res) => {
   if (brandName) {
     searchCriteria['$Brand.name$'] = brandName;
   }
-
-  // if (rating && ratingType) {
-  //   searchCriteria.rating =
-  //     ratingType === 'true' ? { [Op.gte]: rating } : { [Op.lte]: rating };
-  // }
 
   if (newArrival) {
     const nthMonthAgo = new Date();
@@ -362,6 +357,25 @@ const searchProducts = asyncWrapper(async (req, res) => {
   const products = await ProductService.fetchProducts({
     where: searchCriteria,
   });
+
+  if (rating) {
+    const filteredProducts = products.filter((product) => {
+      if (ratingType === 'above') {
+        return product.totalRating ? product.totalRating >= rating : false;
+      } else {
+        return product.totalRating ? product.totalRating < rating : false;
+      }
+    });
+    // Log the products matching the keyword, category, or brand, and send a response
+    console.log(
+      `Products matching ${req.query} have been called, products length= ${filteredProducts.length}`
+    );
+    return res.status(200).json({
+      success: true,
+      message: 'Operation successful',
+      data: filteredProducts,
+    });
+  }
 
   // Log the products matching the keyword, category, or brand, and send a response
   console.log(
