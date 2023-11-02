@@ -1,5 +1,5 @@
 // Import necessary modules and dependencies
-const { Product, RatingReview, Category, Brand } = require('../models');
+const { Product, RatingReview } = require('../models');
 const { asyncWrapper } = require('../middleware');
 const { createCustomError } = require('../utils/errors/custom-error');
 const { Op } = require('sequelize');
@@ -70,11 +70,10 @@ const createProduct = asyncWrapper(async (req, res, next) => {
  * @param {Object} req - Express request object.
  * @param {Object} res - Express response object.
  */
-const getProducts = asyncWrapper(async (req, res) => {
+const getProducts = asyncWrapper(async (req, res, next) => {
   // Extract request query parameters
   const page = req.query.page ? parseInt(req.query.page) : 1;
   const itemsPerPage = development.itemsPerPage;
-  const offset = (page - 1) * itemsPerPage;
 
   const newArrival = req.query.newArrival
     ? JSON.parse(req.query.newArrival)
@@ -96,25 +95,23 @@ const getProducts = asyncWrapper(async (req, res) => {
 
   if (handpicked) {
     whereClause.price = { [Op.lte]: development.handPickedPrice };
-    // whereClause.totalRating = { [Op.gte]: development.handPickedRating };
   }
 
   // Fetch all products from the database
-  const { count, products } = await ProductService.fetchProductsWithCount({
-    where: whereClause,
-    limit: itemsPerPage,
-    offset: offset,
-  });
+  const { count, products } = await ProductService.fetchProductsWithCount(
+    {
+      where: whereClause,
+    },
+    page,
+    itemsPerPage
+  );
 
   const totalPages = Math.ceil(count / itemsPerPage);
 
   // Check if the requested page exceeds the total number of pages
   if (page > totalPages) {
     // Respond with an error indicating that the page does not exist
-    return res.status(404).json({
-      success: false,
-      message: 'Page not found',
-    });
+    return next(createCustomError('Page Does not Exist', 404));
   }
 
   // Log the successful retrieval and send a response with the products
@@ -130,10 +127,7 @@ const getProducts = asyncWrapper(async (req, res) => {
     // Check if the requested page exceeds the total number of pages
     if (page > totalPages) {
       // Respond with an error indicating that the page does not exist
-      return res.status(404).json({
-        success: false,
-        message: 'Page not found',
-      });
+      return next(createCustomError('Page Does not Exist', 404));
     }
 
     return res.status(200).json({
@@ -172,19 +166,7 @@ const getProduct = asyncWrapper(async (req, res, next) => {
   // Extract product ID from request parameters
   const id = Number(req.params.id);
 
-  const product = await ProductService.fetchProductById(id, {
-    include: [
-      { model: Category, attributes: ['name'] },
-      { model: Brand, attributes: ['name'] },
-    ],
-  });
-  // Find the product by ID in the database
-  // const product = await Product.findByPk(id, {
-  //   include: [
-  //     { model: Category, attributes: ["name"] },
-  //     { model: Brand, attributes: ["name"] },
-  //   ],
-  // });
+  const product = await ProductService.fetchProductById(id);
 
   // If the product is found, fetch all ratingReviews associated with the product
   if (product) {
@@ -290,18 +272,20 @@ const deleteProduct = asyncWrapper(async (req, res, next) => {
  * @param {Object} req - Express request object.
  * @param {Object} res - Express response object.s
  */
-const searchProducts = asyncWrapper(async (req, res) => {
+const searchProducts = asyncWrapper(async (req, res, next) => {
   // Extract query
   const {
     keyword,
     categoryName,
     brandName,
-    // rating,
-    // ratingType,
+    rating,
+    ratingType, // "above" or "less"
     newArrival,
     limitedEdition,
     handpickedProducts,
   } = req.query;
+  const page = req.query.page ? parseInt(req.query.page) : 1;
+  const itemsPerPage = development.itemsPerPage;
 
   // Build the search criteria object
   const searchCriteria = {};
@@ -318,11 +302,6 @@ const searchProducts = asyncWrapper(async (req, res) => {
     searchCriteria['$brand.name$'] = brandName;
   }
 
-  // if (rating && ratingType) {
-  //   searchCriteria.rating =
-  //     ratingType === 'true' ? { [Op.gte]: rating } : { [Op.lte]: rating };
-  // }
-
   if (newArrival) {
     const nthMonthAgo = new Date();
     nthMonthAgo.setMonth(nthMonthAgo.getMonth() - development.newArrivalMonths);
@@ -336,16 +315,27 @@ const searchProducts = asyncWrapper(async (req, res) => {
   }
 
   if (handpickedProducts) {
-    console.log(searchCriteria);
     searchCriteria.price = { [Op.lte]: development.handPickedPrice };
 
-    const products = await ProductService.fetchProducts({
-      where: searchCriteria,
-    });
-
+    const products = await ProductService.fetchProducts(
+      {
+        where: searchCriteria,
+      },
+      page,
+      itemsPerPage
+    );
     const handPickedProducts = products.filter((product) =>
       product.totalRating ? product.totalRating >= 4.5 : undefined
     );
+
+    const count = handPickedProducts.length;
+    const totalPages = Math.ceil(count / itemsPerPage);
+
+    // Check if the requested page exceeds the total number of pages
+    if (page > totalPages) {
+      // Respond with an error indicating that the page does not exist
+      return next(createCustomError('Page Does not Exist', 404));
+    }
 
     console.log(
       `Handpicked Products matching ${{
@@ -355,13 +345,64 @@ const searchProducts = asyncWrapper(async (req, res) => {
     return res.status(200).json({
       success: true,
       message: 'Operation successful',
+      pagination: {
+        currentPage: page,
+        itemsPerPage: itemsPerPage,
+        totalProducts: count, // Update to use filtered count
+        totalPages: totalPages, // Update to use filtered count
+      },
       data: handPickedProducts,
     });
   }
 
-  const products = await ProductService.fetchProducts({
-    where: searchCriteria,
-  });
+  const { products, count } = await ProductService.fetchProductsWithCount(
+    {
+      where: searchCriteria,
+    },
+    page,
+    itemsPerPage
+  );
+
+  if (rating) {
+    const filteredProducts = products.filter((product) => {
+      if (ratingType === 'above') {
+        return product.totalRating ? product.totalRating >= rating : false;
+      } else {
+        return product.totalRating < rating;
+      }
+    });
+
+    const count = filteredProducts.length;
+    const totalPages = Math.ceil(count / itemsPerPage);
+
+    // Check if the requested page exceeds the total number of pages
+    if (page > totalPages) {
+      // Respond with an error indicating that the page does not exist
+      return next(createCustomError('Page Does not Exist', 404));
+    }
+    // Log the products matching the keyword, category, or brand, and send a response
+    console.log(
+      `Products matching ${req.query} have been called, products length= ${filteredProducts.length}`
+    );
+    return res.status(200).json({
+      success: true,
+      message: 'Operation successful',
+      pagination: {
+        currentPage: page,
+        itemsPerPage: itemsPerPage,
+        totalProducts: count, // Update to use filtered count
+        totalPages: totalPages, // Update to use filtered count
+      },
+      data: filteredProducts,
+    });
+  }
+  const totalPages = Math.ceil(count / itemsPerPage);
+
+  // Check if the requested page exceeds the total number of pages
+  if (page > totalPages) {
+    // Respond with an error indicating that the page does not exist
+    return next(createCustomError('Page Does not Exist', 404));
+  }
 
   // Log the products matching the keyword, category, or brand, and send a response
   console.log(
@@ -372,6 +413,12 @@ const searchProducts = asyncWrapper(async (req, res) => {
   res.status(200).json({
     success: true,
     message: 'Operation successful',
+    pagination: {
+      currentPage: page,
+      itemsPerPage: itemsPerPage,
+      totalProducts: count, // Update to use filtered count
+      totalPages: totalPages, // Update to use filtered count
+    },
     data: products,
   });
 });
