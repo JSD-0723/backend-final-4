@@ -10,7 +10,7 @@ const reviewValidationRules = () => {
       .isLength({ max: 255 }),
     body('description', 'description must be string').isString().notEmpty(),
     body('rating', 'rating must be integer with max length of 15 characters')
-      .isInt({ max: 5, min: 1 })
+      .isFloat({ max: 5, min: 1 })
       .notEmpty(),
     body('userId', 'userId must be numeric with max limit of 15 digits')
       .isNumeric()
@@ -37,7 +37,7 @@ const reviewOptionalRules = () => {
       .notEmpty(),
     body('rating', 'rating must be integer with max length of 15 characters')
       .optional()
-      .isInt({ max: 5, min: 1 })
+      .isFloat({ max: 5, min: 1 })
       .notEmpty(),
     body('userId', 'userId must be numeric with max limit of 15 digits')
       .optional()
