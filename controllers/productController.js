@@ -311,11 +311,11 @@ const searchProducts = asyncWrapper(async (req, res) => {
   }
 
   if (categoryName) {
-    searchCriteria['$Category.name$'] = categoryName;
+    searchCriteria['$category.name$'] = categoryName;
   }
 
   if (brandName) {
-    searchCriteria['$Brand.name$'] = brandName;
+    searchCriteria['$brand.name$'] = brandName;
   }
 
   // if (rating && ratingType) {
