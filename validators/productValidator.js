@@ -106,6 +106,7 @@ const productQueryRules = () => {
 // Product search Validation rules
 const productSearchRules = () => {
   return [
+    query('page', 'page query must be boolean').default(1).isInt(),
     query('keyword', 'keyword must be a string')
       .optional()
       .isString()
