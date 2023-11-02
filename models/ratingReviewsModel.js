@@ -34,7 +34,7 @@ const RatingReview = sequelize.define(
       type: DataTypes.FLOAT,
       allowNull: false,
       validate: {
-        isInt: {
+        isFloat: {
           msg: 'Rating must be an float',
         },
         min: {
