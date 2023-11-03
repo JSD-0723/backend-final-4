@@ -56,18 +56,21 @@ const generateProductResponse = async (product) => {
  * @param {object} options - Options for querying products.
  * @returns {Promise<{products: object[], count: number}>} An object containing an array of products and the total count.
  */
-const fetchProductsWithCount = async (options) => {
-  const products = await Product.findAll({
+const fetchProductsWithCount = async (options, page, itemsPerPage) => {
+  const offset = (page - 1) * itemsPerPage;
+  const { count, rows } = await Product.findAndCountAll({
     ...options,
+    limit: itemsPerPage,
+    offset: offset,
     include: [
       { model: Category, attributes: ['name'] },
       { model: Brand, attributes: ['name'] },
     ],
   });
-  const count = await Product.count({ where: options.where });
+  // const count = await Product.count({ where: options.where });
 
   // Transform the products data to include category name and brand name
-  const transformedProducts = products.map(async (product) => {
+  const transformedProducts = rows.map(async (product) => {
     // Get the totalRating and ratingCount
     return await generateProductResponse(product);
   });
@@ -87,9 +90,12 @@ const fetchProductsWithCount = async (options) => {
  * @param {object} options - Options for querying products.
  * @returns {Promise<{products: object[]}>} An object containing an array of products and the total count.
  */
-const fetchProducts = async (options) => {
+const fetchProducts = async (options, page, itemsPerPage) => {
+  const offset = (page - 1) * itemsPerPage;
   const products = await Product.findAll({
     ...options,
+    limit: itemsPerPage,
+    offset: offset,
     include: [
       { model: Category, attributes: ['name'] },
       { model: Brand, attributes: ['name'] },
