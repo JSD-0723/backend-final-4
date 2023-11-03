@@ -20,8 +20,8 @@ jobs:
         run: |
           docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml run --rm app npm test
 
-      # - name: Tear down Docker Compose
-      #   run: docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml down
+      - name: Tear down Docker Compose
+        run: docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml down
       
       - name: Import Data into Clever Cloud Database
         run: |
