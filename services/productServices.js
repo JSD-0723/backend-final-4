@@ -1,6 +1,8 @@
 const { Product, Category, Brand } = require('../models');
 const { development } = require('../config/config');
 const { Op } = require('sequelize');
+const sequelize = require('../utils/dataBaseConnection');
+
 
 /**
  * Retrieve a product's rating summary, including the total rating and rating count.
@@ -13,11 +15,11 @@ const getProductRatingSummary = async (product) => {
 
   const rating = reviews
     ? (reviews
-        .map((review) => review.rating)
-        .reduce((acc, current) => acc + current, 0) /
-        reviews.length /
-        5) *
-      5
+      .map((review) => review.rating)
+      .reduce((acc, current) => acc + current, 0) /
+      reviews.length /
+      5) *
+    5
     : 0;
   const totalRating = Math.round(rating * 10) / 10;
   const ratingCount = reviews ? reviews.length : 0;
@@ -122,7 +124,13 @@ const fetchProducts = async (options, page, itemsPerPage) => {
  * @returns {Promise<object>} A structured response object containing product details and rating summary.
  */
 const fetchProductById = async (id, options) => {
-  const product = await Product.findByPk(id, options);
+  const product = await Product.findByPk(id, {
+    ...options,
+    include: [
+      { model: Category, attributes: ['name'] },
+      { model: Brand, attributes: ['name'] },
+    ],
+  });
 
   return await generateProductResponse(product);
 };
@@ -140,9 +148,44 @@ const fetchHandPickedProducts = async (options) => {
   return handPickedProducts;
 };
 
+
+/**
+ * Fetch related products by the category of a given product.
+ *
+ * @param {number} productId - The ID of the product to fetch related products for.
+ * @returns {Promise<object>} An object containing related products.
+ */
+const fetchRelatedProductsByProduct = async (productId, limit = 3) => {
+  const product = await Product.findByPk(productId);
+
+  if (!product) {
+    // Handle the case where the product is not found
+    throw new Error(`No product with id: ${productId} is found`);
+  }
+
+  const category = await Category.findByPk(product.categoryId);
+
+  if (!category) {
+    // Handle the case where the category is not found
+    throw new Error(`No category with id: ${product.categoryId} is found`);
+  }
+
+  const relatedProducts = await Product.findAll({
+    where: {
+      id: { [Op.not]: productId },
+      categoryId: category.id
+    },
+    order: sequelize.literal('RAND()'), // Order randomly
+    limit
+  });
+
+  return relatedProducts;
+};
+
 module.exports = {
   fetchProducts,
   fetchProductsWithCount,
   fetchProductById,
   fetchHandPickedProducts,
+  fetchRelatedProductsByProduct
 };
