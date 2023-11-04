@@ -109,7 +109,7 @@ const getProducts = asyncWrapper(async (req, res, next) => {
   const totalPages = Math.ceil(count / itemsPerPage);
 
   // Check if the requested page exceeds the total number of pages
-  if (page > totalPages) {
+  if (page > totalPages && totalPages > 0) {
     // Respond with an error indicating that the page does not exist
     return next(createCustomError('Page Does not Exist', 404));
   }
@@ -125,7 +125,7 @@ const getProducts = asyncWrapper(async (req, res, next) => {
     const totalPages = Math.ceil(handpickedCount / itemsPerPage);
 
     // Check if the requested page exceeds the total number of pages
-    if (page > totalPages) {
+    if (page > totalPages && totalPages > 0) {
       // Respond with an error indicating that the page does not exist
       return next(createCustomError('Page Does not Exist', 404));
     }
@@ -332,9 +332,9 @@ const searchProducts = asyncWrapper(async (req, res, next) => {
     const totalPages = Math.ceil(count / itemsPerPage);
 
     // Check if the requested page exceeds the total number of pages
-    if (page > totalPages) {
+    if (page > totalPages && totalPages > 0) {
       // Respond with an error indicating that the page does not exist
-      return next(createCustomError('Page Does not Exist', 404));
+      return next(createCustomError('Page does not exists', 404));
     }
 
     console.log(
@@ -376,7 +376,7 @@ const searchProducts = asyncWrapper(async (req, res, next) => {
     const totalPages = Math.ceil(count / itemsPerPage);
 
     // Check if the requested page exceeds the total number of pages
-    if (page > totalPages) {
+    if (page > totalPages && totalPages > 0) {
       // Respond with an error indicating that the page does not exist
       return next(createCustomError('Page Does not Exist', 404));
     }
@@ -399,7 +399,7 @@ const searchProducts = asyncWrapper(async (req, res, next) => {
   const totalPages = Math.ceil(count / itemsPerPage);
 
   // Check if the requested page exceeds the total number of pages
-  if (page > totalPages) {
+  if (page > totalPages && totalPages > 0) {
     // Respond with an error indicating that the page does not exist
     return next(createCustomError('Page Does not Exist', 404));
   }
