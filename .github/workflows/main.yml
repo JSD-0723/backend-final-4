@@ -6,8 +6,8 @@ on:
     branches: ['main']
 
 jobs:
-  test_and_update_data:
-    name: Run Jest Tests and Update Data
+  test:
+    name: Run Jest Tests
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -22,7 +22,15 @@ jobs:
 
       - name: Tear down Docker Compose
         run: docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml down
-      
+
+  update_data:
+    name: Update Data in Clever Cloud Database
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
       - name: Import Data into Clever Cloud Database
         run: |
           mysql -h$CLEVER_CLOUD_DB_HOST -u$CLEVER_CLOUD_DB_USER -p$CLEVER_CLOUD_DB_PASSWORD $CLEVER_CLOUD_DB_NAME < data_dump.sql
@@ -35,7 +43,7 @@ jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
-    needs: test_and_update_data
+    needs: update_data
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
