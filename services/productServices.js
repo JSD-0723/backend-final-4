@@ -3,7 +3,6 @@ const { development } = require('../config/config');
 const { Op } = require('sequelize');
 const sequelize = require('../utils/dataBaseConnection');
 
-
 /**
  * Retrieve a product's rating summary, including the total rating and rating count.
  *
@@ -15,11 +14,11 @@ const getProductRatingSummary = async (product) => {
 
   const rating = reviews
     ? (reviews
-      .map((review) => review.rating)
-      .reduce((acc, current) => acc + current, 0) /
-      reviews.length /
-      5) *
-    5
+        .map((review) => review.rating)
+        .reduce((acc, current) => acc + current, 0) /
+        reviews.length /
+        5) *
+      5
     : 0;
   const totalRating = Math.round(rating * 10) / 10;
   const ratingCount = reviews ? reviews.length : 0;
@@ -148,7 +147,6 @@ const fetchHandPickedProducts = async (options) => {
   return handPickedProducts;
 };
 
-
 /**
  * Fetch related products by the category of a given product.
  *
@@ -173,13 +171,26 @@ const fetchRelatedProductsByProduct = async (productId, limit = 3) => {
   const relatedProducts = await Product.findAll({
     where: {
       id: { [Op.not]: productId },
-      categoryId: category.id
+      categoryId: category.id,
     },
     order: sequelize.literal('RAND()'), // Order randomly
-    limit
+    limit,
+    include: [
+      { model: Category, attributes: ['name'] },
+      { model: Brand, attributes: ['name'] },
+    ],
   });
 
-  return relatedProducts;
+  // Transform the products data to include category name and brand name
+  const transformedProducts = relatedProducts.map(async (product) => {
+    // Get the totalRating and ratingCount
+    return await generateProductResponse(product);
+  });
+
+  // Wait for all promises to resolve
+  const responseData = await Promise.all(transformedProducts);
+
+  return responseData;
 };
 
 module.exports = {
@@ -187,5 +198,5 @@ module.exports = {
   fetchProductsWithCount,
   fetchProductById,
   fetchHandPickedProducts,
-  fetchRelatedProductsByProduct
+  fetchRelatedProductsByProduct,
 };
