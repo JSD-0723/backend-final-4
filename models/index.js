@@ -13,7 +13,7 @@ const Discount = require('./discountModel');
 const WishList = require('./wishListModel');
 const WishListItem = require('./wishListItemModel');
 const Tax = require('./taxModel');
-
+const Image = require('./imagesModel');
 
 module.exports = {
   Address,
@@ -30,5 +30,6 @@ module.exports = {
   Discount,
   WishList,
   WishListItem,
-  Tax
+  Tax,
+  Image,
 };

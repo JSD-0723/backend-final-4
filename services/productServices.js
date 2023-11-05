@@ -1,4 +1,4 @@
-const { Product, Category, Brand } = require('../models');
+const { Product, Category, Brand, Image } = require('../models');
 const { development } = require('../config/config');
 const { Op } = require('sequelize');
 const sequelize = require('../utils/dataBaseConnection');
@@ -37,6 +37,9 @@ const getProductRatingSummary = async (product) => {
 const generateProductResponse = async (product) => {
   const { totalRating, ratingCount } = await getProductRatingSummary(product);
 
+  const productAlterImages = Object.values(product.images);
+  const imageUrlArray = productAlterImages.map((imageObj) => imageObj.imageUrl);
+
   return {
     id: product.id,
     title: product.title,
@@ -44,6 +47,7 @@ const generateProductResponse = async (product) => {
     price: product.price,
     availableInStock: product.availableInStock,
     imageUrl: product.imageUrl,
+    images: imageUrlArray,
     category: product.category.name, // Access the category name
     brand: product.brand.name, // Access the brand name
     totalRating,
@@ -66,6 +70,7 @@ const fetchProductsWithCount = async (options, page, itemsPerPage) => {
     include: [
       { model: Category, attributes: ['name'] },
       { model: Brand, attributes: ['name'] },
+      { model: Image, attributes: ['imageUrl'] },
     ],
   });
   // const count = await Product.count({ where: options.where });
@@ -100,6 +105,7 @@ const fetchProducts = async (options, page, itemsPerPage) => {
     include: [
       { model: Category, attributes: ['name'] },
       { model: Brand, attributes: ['name'] },
+      { model: Image, attributes: ['imageUrl'] },
     ],
   });
 
@@ -128,6 +134,7 @@ const fetchProductById = async (id, options) => {
     include: [
       { model: Category, attributes: ['name'] },
       { model: Brand, attributes: ['name'] },
+      { model: Image, attributes: ['imageUrl'] },
     ],
   });
 
@@ -178,6 +185,7 @@ const fetchRelatedProductsByProduct = async (productId, limit = 3) => {
     include: [
       { model: Category, attributes: ['name'] },
       { model: Brand, attributes: ['name'] },
+      { model: Image, attributes: ['imageUrl'] },
     ],
   });
 
