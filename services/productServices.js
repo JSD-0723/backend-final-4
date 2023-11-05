@@ -37,8 +37,8 @@ const getProductRatingSummary = async (product) => {
 const generateProductResponse = async (product) => {
   const { totalRating, ratingCount } = await getProductRatingSummary(product);
 
-  const productAlterImages = Object.values(product.images);
-  const imageUrlArray = productAlterImages.map((imageObj) => imageObj.imageUrl);
+  // const productAlterImages = Object.values(product.images);
+  // const imageUrlArray = productAlterImages.map((imageObj) => imageObj.imageUrl);
 
   return {
     id: product.id,
@@ -47,7 +47,7 @@ const generateProductResponse = async (product) => {
     price: product.price,
     availableInStock: product.availableInStock,
     imageUrl: product.imageUrl,
-    images: imageUrlArray,
+    // images: imageUrlArray,
     category: product.category.name, // Access the category name
     brand: product.brand.name, // Access the brand name
     totalRating,
@@ -70,7 +70,7 @@ const fetchProductsWithCount = async (options, page, itemsPerPage) => {
     include: [
       { model: Category, attributes: ['name'] },
       { model: Brand, attributes: ['name'] },
-      { model: Image, attributes: ['imageUrl'] },
+      // { model: Image, attributes: ['imageUrl'] },
     ],
   });
   // const count = await Product.count({ where: options.where });
