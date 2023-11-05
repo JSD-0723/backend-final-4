@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Oct 31, 2023 at 05:50 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.0.28
+-- Host: b8g558yloomxczrpajro-mysql.services.clever-cloud.com:3306
+-- Generation Time: Nov 05, 2023 at 11:01 AM
+-- Server version: 8.0.22-13
+-- PHP Version: 8.2.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `test`
+-- Database: `b8g558yloomxczrpajro`
 --
 
 -- --------------------------------------------------------
@@ -28,13 +28,13 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `address` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `street` varchar(50) NOT NULL,
   `postalCode` varchar(20) NOT NULL,
   `state` varchar(50) NOT NULL,
   `city` varchar(50) NOT NULL,
-  `userId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `userId` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `address`
@@ -57,10 +57,10 @@ INSERT INTO `address` (`id`, `street`, `postalCode`, `state`, `city`, `userId`) 
 --
 
 CREATE TABLE `brand` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `name` varchar(50) NOT NULL,
   `imageUrl` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `brand`
@@ -68,14 +68,13 @@ CREATE TABLE `brand` (
 
 INSERT INTO `brand` (`id`, `name`, `imageUrl`) VALUES
 (1, 'Zara', 'https://i.ibb.co/R6kk5Sx/Zara-Logo-1.png'),
-(2, 'Dolce & Gabbana', 'https://i.ibb.co/xS4Bxwk/Dolce-Gabbana-1.png'),
+(2, 'Dolce Gabbana', 'https://i.ibb.co/xS4Bxwk/Dolce-Gabbana-1.png'),
 (3, 'H&M', 'https://i.ibb.co/HxJgYJN/layer1.png'),
 (4, 'Chanel', 'https://i.ibb.co/rfmBFR5/Chanel-logo-interlocking-cs-1.png'),
 (5, 'Prada', 'https://i.ibb.co/105JXWk/Prada-Logo-1.png'),
 (6, 'Biba', 'https://i.ibb.co/3rzrX4B/logo-1.png'),
 (7, 'Coach', 'https://i.ibb.co/0X4qPBV/coach-logo-removebg-preview.png'),
-(8, 'Remus', 'https://i.ibb.co/nn9YdfG/remus-vector-logo-200x200.png'),
-(9, 'Boujee', 'https://i.ibb.co/6P0Jy3z/download-2.png');
+(8, 'Remus', 'https://i.ibb.co/nn9YdfG/remus-vector-logo-200x200.png');
 
 -- --------------------------------------------------------
 
@@ -84,10 +83,10 @@ INSERT INTO `brand` (`id`, `name`, `imageUrl`) VALUES
 --
 
 CREATE TABLE `cart` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `totalPrice` decimal(20,2) NOT NULL,
-  `userId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `userId` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `cart`
@@ -106,12 +105,12 @@ INSERT INTO `cart` (`id`, `totalPrice`, `userId`) VALUES
 --
 
 CREATE TABLE `cartitem` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `price` decimal(20,2) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `productId` int(11) NOT NULL,
-  `cartId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `quantity` int NOT NULL,
+  `productId` int NOT NULL,
+  `cartId` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -120,11 +119,11 @@ CREATE TABLE `cartitem` (
 --
 
 CREATE TABLE `category` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `name` varchar(50) NOT NULL,
   `imageUrl` varchar(255) NOT NULL,
-  `isFeatured` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `isFeatured` tinyint(1) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `category`
@@ -146,10 +145,10 @@ INSERT INTO `category` (`id`, `name`, `imageUrl`, `isFeatured`) VALUES
 --
 
 CREATE TABLE `discount` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `description` varchar(255) NOT NULL,
   `discountPercentage` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `discount`
@@ -169,17 +168,17 @@ INSERT INTO `discount` (`id`, `description`, `discountPercentage`) VALUES
 --
 
 CREATE TABLE `order` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `totalPrice` decimal(20,2) NOT NULL,
   `date` date DEFAULT NULL,
   `status` varchar(20) NOT NULL,
   `tax` decimal(20,2) NOT NULL,
   `deliveryFee` decimal(20,2) NOT NULL,
-  `paymentId` int(11) NOT NULL,
-  `cartId` int(11) NOT NULL,
-  `userId` int(11) NOT NULL,
-  `addressId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `paymentId` int NOT NULL,
+  `cartId` int NOT NULL,
+  `userId` int NOT NULL,
+  `addressId` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -188,12 +187,12 @@ CREATE TABLE `order` (
 --
 
 CREATE TABLE `orderitem` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `price` decimal(20,2) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `productId` int(11) NOT NULL,
-  `orderId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `quantity` int NOT NULL,
+  `productId` int NOT NULL,
+  `orderId` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -202,11 +201,11 @@ CREATE TABLE `orderitem` (
 --
 
 CREATE TABLE `payment` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `provider` varchar(20) NOT NULL,
   `status` varchar(20) NOT NULL,
   `type` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `payment`
@@ -225,75 +224,94 @@ INSERT INTO `payment` (`id`, `provider`, `status`, `type`) VALUES
 --
 
 CREATE TABLE `product` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `title` varchar(50) NOT NULL,
   `description` text NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `availableInStock` int(11) NOT NULL,
+  `availableInStock` int NOT NULL,
   `imageUrl` varchar(255) NOT NULL,
-  `categoryId` int(11) NOT NULL,
-  `brandId` int(11) NOT NULL,
-  `discountId` int(11) DEFAULT NULL,
+  `categoryId` int NOT NULL,
+  `brandId` int NOT NULL,
+  `discountId` int DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `product`
 --
 
 INSERT INTO `product` (`id`, `title`, `description`, `price`, `availableInStock`, `imageUrl`, `categoryId`, `brandId`, `discountId`, `createdAt`, `updatedAt`) VALUES
-(1, 'Classic Watch', 'A timeless piece for every occasion.', 100.00, 50, 'https://www.linjer.co/cdn/shop/products/linjer-classic-watch-38-gunmetal-black-1-front_1000x.jpg?v=1602577160', 5, 1, 3, '2023-05-23 08:08:55', '2023-10-23 08:08:55'),
-(2, 'Leather Handbag', 'Elegance in every detail, crafted with genuine leather.', 150.00, 30, 'https://atpatelier.com/cdn/shop/products/Arezzo_Brandy_Vacchetta_Handbag_Front.jpg?v=1678205144', 4, 2, 1, '2023-10-23 08:08:55', '2023-10-23 08:08:55'),
-(3, 'Aviator Sunglasses', 'Protect your eyes with style.', 60.00, 40, 'https://www.slazenger.com/images/imgzoom/75/75617266_xxl.jpg', 6, 3, 2, '2023-10-23 08:08:55', '2023-10-23 08:08:55'),
-(4, 'Fedora Hat', 'A classic accessory for a touch of sophistication.', 35.00, 25, 'https://www.bon-clic-bon-genre.us/photo/px1844-noir-1_20221026111212.jpg', 4, 1, 2, '2023-05-23 08:08:55', '2023-10-23 08:08:55'),
-(5, 'Diamond Necklace', 'Shine bright with this exquisite diamond necklace.', 300.00, 15, 'https://www.sarahandsebastian.com/cdn/shop/products/SolitaireRoundDiamondNecklace2YellowGold_Sarah_Sebastian.jpg?v=1638421761', 7, 9, 1, '2023-10-23 08:08:55', '2023-10-23 08:08:55'),
-(6, 'Stylish Backpack', 'Versatile and trendy, perfect for daily adventures.', 80.00, 35, 'https://cdn.thewirecutter.com/wp-content/media/2022/12/laptopbackpacks-2048px-6905.jpg?auto=webp&quality=75&width=1024', 4, 8, 2, '2023-05-23 08:08:55', '2023-10-23 08:08:55'),
-(7, 'Silver Bracelet', 'Add a touch of elegance to your wrist.', 49.99, 28, 'https://cfs3.monicavinader.com/images/pdp-full/15715191-ss-bl-stch-non-f1.jpg', 7, 9, 3, '2023-10-23 08:08:55', '2023-10-23 08:08:55'),
-(8, 'Wide-Brim Hat', 'Stay stylish and sun-protected.', 39.99, 22, 'https://www.levinehat.com/cdn/shop/products/IMG_5170.png?v=1569966302', 4, 5, 2, '2023-10-23 08:08:55', '2023-10-23 08:08:55'),
-(9, 'Gold Earrings', 'Accentuate your look with these dazzling gold earrings.', 89.99, 18, 'https://www.thangamayil.com/pub/media/catalog/product/cache/9ba065ba720617b32bb6404bbcb37f7a/b/a/base_cgl22istu07894.jpg', 7, 6, 1, '2023-10-23 08:08:55', '2023-10-23 08:08:55'),
-(10, 'Modern Wristwatch', 'Sleek design for the contemporary lifestyle.', 119.99, 32, 'https://www.watchtime.com/wp-content/uploads/2018/08/Jaeger-LeCoultre-Polaris-Memovox_Front-1000.jpg', 5, 4, 1, '2023-10-23 08:08:55', '2023-10-23 08:08:55'),
-(11, 'Canvas Tote Bag', 'A stylish and spacious tote for everyday use.', 49.99, 40, 'https://image.uniqlo.com/UQ/ST3/AsianCommon/imagesgoods/445076/item/goods_30_445076.jpg?width=494', 3, 7, 2, '2023-10-23 08:08:55', '2023-10-23 08:08:55'),
-(12, 'Sporty Backpack', 'Perfect for the active lifestyle, designed for comfort.', 64.99, 35, 'https://ca.targus.com/cdn/shop/products/0028543_156-sport-backpack-224802_1024x1024.png?v=1656002516', 4, 6, 3, '2023-10-23 08:08:55', '2023-10-23 08:08:55'),
-(13, 'Pearl Necklace', 'Timeless elegance with a string of pearls.', 179.99, 20, 'https://kinclimg3.bluestone.com/f_jpg,c_scale,w_1024,q_80,b_rgb:f0f0f0/giproduct/BISA0255N23_YAA18PRWHXXXXXXXX_ABCD00-PICS-00003-1024-9327.png', 7, 9, 1, '2023-10-23 08:08:55', '2023-10-23 08:08:55'),
-(14, 'Leather Wallet', 'Classic design with multiple compartments for your essentials.', 29.99, 50, 'https://www.tradeinn.com/f/13787/137871445/dolce---gabbana-710262-men-leather-wallet.jpg', 4, 2, 2, '2023-10-23 08:08:55', '2023-10-23 08:08:55'),
-(15, 'Retro Sunglasses', 'Channel your inner vintage with these stylish shades.', 54.99, 30, 'https://www.icing.com/dw/image/v2/BBTK_PRD/on/demandware.static/-/Sites-master-catalog/default/dw9f321d1e/images/icing/hi-res/59699_1.jpg?sw=734&sh=734&sm=fit', 6, 2, 3, '2023-05-23 08:08:55', '2023-10-23 08:08:55'),
-(16, 'Silver Cuff Bracelet', 'A statement piece to elevate your wristwear.', 69.99, 25, 'https://cdn-images.farfetch-contents.com/18/19/37/69/18193769_40365499_600.jpg', 7, 5, 2, '2023-10-23 08:08:55', '2023-10-23 08:08:55'),
-(17, 'Panama Hat', 'Stay cool and stylish under the sun.', 44.99, 28, 'https://d2mpxrrcad19ou.cloudfront.net/item_images/385535/8586910_fullsize.jpg', 4, 4, 1, '2023-10-23 08:08:55', '2023-10-23 08:08:55'),
-(18, 'Rose Gold Earrings', 'Add a touch of warmth with these elegant rose gold earrings.', 99.99, 18, 'https://cfs3.monicavinader.com/images/pdp-small-large/14347838-rp-ea-swer-ros-f1.jpg', 7, 3, 3, '2023-10-23 08:08:55', '2023-10-23 08:08:55'),
-(19, 'Minimalist Wristwatch', 'Simplicity meets sophistication in this modern timepiece.', 89.99, 32, 'https://example.com/minimalist-wristwatch.jpg', 2, 1, 2, '2023-05-23 08:08:55', '2023-10-23 08:08:55'),
-(20, 'Crystal Pendant Necklace', 'Capture the light with this dazzling crystal pendant.', 129.99, 15, 'https://example.com/crystal-pendant-necklace.jpg', 5, 2, 1, '2023-10-23 08:08:55', '2023-10-23 08:08:55'),
-(21, 'Leather Crossbody Bag', 'Compact and versatile, perfect for on-the-go.', 74.99, 22, 'https://example.com/leather-crossbody-bag.jpg', 1, 3, 3, '2023-10-23 08:08:55', '2023-10-23 08:08:55'),
-(22, 'Diamond Stud Earrings', 'Timeless elegance with a touch of sparkle.', 149.99, 17, 'https://example.com/diamond-stud-earrings.jpg', 5, 1, 1, '2023-10-23 08:08:55', '2023-10-23 08:08:55'),
-(23, 'Laptop Backpack', 'Stay organized and stylish with this tech-friendly backpack.', 89.99, 20, 'https://example.com/laptop-backpack.jpg', 1, 2, 3, '2023-05-23 08:08:55', '2023-10-23 08:08:55'),
-(24, 'Gold Link Bracelet', 'Make a statement with this bold and trendy gold link bracelet.', 79.99, 19, 'https://example.com/gold-link-bracelet.jpg', 5, 3, 2, '2023-10-23 08:08:55', '2023-10-23 08:08:55'),
-(25, 'Classic Aviator Sunglasses', 'Achieve a timeless look with these iconic aviator shades.', 59.99, 25, 'https://example.com/classic-aviator-sunglasses.jpg', 3, 1, 3, '2023-10-23 08:08:55', '2023-10-23 08:08:55');
+(1, 'Classic Watch', 'A timeless piece for every occasion.', 100.00, 50, 'https://www.linjer.co/cdn/shop/products/linjer-classic-watch-38-gunmetal-black-1-front_1000x.jpg?v=1602577160', 5, 1, 3, '2023-05-23 08:08:55', '2023-11-02 13:28:23'),
+(2, 'Leather Handbag', 'Elegance in every detail, crafted with genuine leather.', 150.00, 30, 'https://atpatelier.com/cdn/shop/products/Arezzo_Brandy_Vacchetta_Handbag_Front.jpg?v=1678205144', 4, 2, 1, '2023-10-23 08:08:55', '2023-11-02 13:29:49'),
+(3, 'Aviator Sunglasses', 'Protect your eyes with style.', 60.00, 40, 'https://www.slazenger.com/images/imgzoom/75/75617266_xxl.jpg', 6, 3, 2, '2023-10-23 08:08:55', '2023-11-02 13:32:01'),
+(4, 'Fedora Hat', 'A classic accessory for a touch of sophistication.', 35.00, 25, 'https://www.bon-clic-bon-genre.us/photo/px1844-noir-1_20221026111212.jpg', 4, 1, 2, '2023-05-23 08:08:55', '2023-11-02 13:34:07'),
+(6, 'Stylish Backpack', 'Versatile and trendy, perfect for daily adventures.', 80.00, 35, 'https://cdn.thewirecutter.com/wp-content/media/2022/12/laptopbackpacks-2048px-6905.jpg?auto=webp&quality=75&width=1024', 4, 8, 2, '2023-05-23 08:08:55', '2023-11-02 13:35:57'),
+(8, 'Wide-Brim Hat', 'Stay stylish and sun-protected.', 39.99, 22, 'https://www.levinehat.com/cdn/shop/products/IMG_5170.png?v=1569966302', 4, 5, 2, '2023-10-23 08:08:55', '2023-11-02 13:40:27'),
+(9, 'Gold Earrings', 'Accentuate your look with these dazzling gold earrings.', 89.99, 18, 'https://i.pinimg.com/550x/ed/88/55/ed885578c95d42d18fac841378f80e7f.jpg', 7, 6, 1, '2023-10-23 08:08:55', '2023-11-02 13:41:39'),
+(10, 'Modern Wristwatch', 'Sleek design for the contemporary lifestyle.', 119.99, 32, 'https://www.watchtime.com/wp-content/uploads/2018/08/Jaeger-LeCoultre-Polaris-Memovox_Front-1000.jpg', 5, 4, 1, '2023-10-23 08:08:55', '2023-11-02 13:42:49'),
+(11, 'Canvas Tote Bag', 'A stylish and spacious tote for everyday use.', 49.99, 40, 'https://image.uniqlo.com/UQ/ST3/AsianCommon/imagesgoods/445076/item/goods_30_445076.jpg?width=494', 3, 7, 2, '2023-10-23 08:08:55', '2023-11-02 13:44:12'),
+(12, 'Sporty Backpack', 'Perfect for the active lifestyle, designed for comfort.', 64.99, 35, 'https://ca.targus.com/cdn/shop/products/0028543_156-sport-backpack-224802_1024x1024.png?v=1656002516', 4, 6, 3, '2023-10-23 08:08:55', '2023-11-02 13:44:50'),
+(14, 'Leather Wallet', 'Classic design with multiple compartments for your essentials.', 29.99, 50, 'https://www.tradeinn.com/f/13787/137871445/dolce---gabbana-710262-men-leather-wallet.jpg', 4, 2, 2, '2023-10-23 08:08:55', '2023-11-02 13:46:43'),
+(15, 'Retro Sunglasses', 'Channel your inner vintage with these stylish shades.', 54.99, 30, 'https://www.icing.com/dw/image/v2/BBTK_PRD/on/demandware.static/-/Sites-master-catalog/default/dw9f321d1e/images/icing/hi-res/59699_1.jpg?sw=734&sh=734&sm=fit', 6, 2, 3, '2023-05-23 08:08:55', '2023-11-02 13:48:00'),
+(16, 'Silver Cuff Bracelet', 'A statement piece to elevate your wristwear.', 69.99, 25, 'https://cdn-images.farfetch-contents.com/18/19/37/69/18193769_40365499_600.jpg', 7, 5, 2, '2023-10-23 08:08:55', '2023-11-02 13:49:01'),
+(17, 'Panama Hat', 'Stay cool and stylish under the sun.', 44.99, 28, 'https://d2mpxrrcad19ou.cloudfront.net/item_images/385535/8586910_fullsize.jpg', 4, 4, 1, '2023-10-23 08:08:55', '2023-11-02 13:56:43'),
+(18, 'Rose Gold Earrings', 'Add a touch of warmth with these elegant rose gold earrings.', 99.99, 18, 'https://cfs3.monicavinader.com/images/pdp-small-large/14347838-rp-ea-swer-ros-f1.jpg', 7, 3, 3, '2023-10-23 08:08:55', '2023-11-02 13:57:56'),
+(19, 'Minimalist Wristwatch', 'Simplicity meets sophistication in this modern timepiece.', 89.99, 32, 'https://www.linjer.co/cdn/shop/products/linjer-minimalist-watch-38-rose-gold-mocha-1-front_1000x.jpg?v=1571295293', 5, 5, 2, '2023-05-23 08:08:55', '2023-11-02 13:58:51'),
+(20, 'Crystal Pendant Necklace', 'Capture the light with this dazzling crystal pendant.', 129.99, 15, 'https://m.media-amazon.com/images/I/81k1fn921lL._AC_SL1500_.jpg', 7, 2, 1, '2023-10-23 08:08:55', '2023-11-02 14:00:08'),
+(21, 'Leather Crossbody Bag', 'Compact and versatile, perfect for on-the-go.', 74.99, 22, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5anxgeKxSACMDXs7Ly6GI5BRM2WO6HX_79A&usqp=CAU', 1, 3, 3, '2023-10-23 08:08:55', '2023-11-02 14:02:09'),
+(22, 'Diamond Stud Earrings', 'Timeless elegance with a touch of sparkle.', 149.99, 17, 'https://image.brilliantearth.com/media/product_images/25/BE304RD400_white_top.jpg', 5, 1, 1, '2023-10-23 08:08:55', '2023-11-02 14:03:14'),
+(23, 'Laptop Backpack', 'Stay organized and stylish with this tech-friendly backpack.', 89.99, 20, 'https://mt.studio.ps/web/image/product.template/2253/image_1024?unique=d6f4e12', 1, 2, 3, '2023-05-23 08:08:55', '2023-11-02 14:28:30'),
+(24, 'Gold Link Bracelet', 'Make a statement with this bold and trendy gold link bracelet.', 79.99, 19, 'https://media.tiffany.com/is/image/Tiffany/EcomItemL2/tiffany-hardwearsmall-link-bracelet-38086839_993599_ED.jpg', 5, 3, 2, '2023-10-23 08:08:55', '2023-11-02 14:53:55'),
+(25, 'Classic Aviator Sunglasses', 'Achieve a timeless look with these iconic aviator shades.', 59.99, 25, 'https://images.ray-ban.com/is/image/RayBan/805289602057__STD__shad__qt.png?impolicy=RB_Product&width=800&bgc=%23f2f2f2', 3, 1, 3, '2023-10-23 08:08:55', '2023-11-02 14:54:38');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ratingreview`
+-- Table structure for table `ratingReview`
 --
 
-CREATE TABLE `ratingreview` (
-  `id` int(11) NOT NULL,
+CREATE TABLE `ratingReview` (
+  `id` int NOT NULL,
   `title` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `rating` int(11) NOT NULL,
-  `userId` int(11) NOT NULL,
-  `productId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `rating` float NOT NULL,
+  `userId` int NOT NULL,
+  `productId` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `ratingreview`
+-- Dumping data for table `ratingReview`
 --
 
-INSERT INTO `ratingreview` (`id`, `title`, `description`, `rating`, `userId`, `productId`) VALUES
+INSERT INTO `ratingReview` (`id`, `title`, `description`, `rating`, `userId`, `productId`) VALUES
 (1, 'Great Product!', 'I absolutely love this product. It exceeded my expectations.', 5, 1, 1),
 (2, 'Not Satisfied', 'The product did not meet my expectations. Disappointed.', 2, 2, 2),
 (3, 'Amazing Quality', 'Highly recommend! The quality is outstanding.', 4, 3, 3),
 (4, 'Perfect Fit', 'This product fits perfectly. I am very happy with my purchase.', 5, 4, 4),
-(5, 'Disappointing', 'Not what I expected. The product does not match the description.', 1, 5, 5);
+(6, 'Nice Classical Watch', 'I love this product. it\'s Awesome!', 4, 2, 1),
+(7, 'Normal Watch', 'It looks like any other watch, nothing special about it', 3.5, 2, 1),
+(8, 'I recommend this Handbag', 'Nice looking Handbag, the delivery was fast also', 4.5, 3, 2),
+(9, 'I look great in them', 'I look badass in this glasses', 5, 4, 3),
+(10, 'Ugly Hat', 'I look like a hoppo in it', 3, 5, 4),
+(12, 'Cool looking bag', 'Comfortable and a nice looking hat', 4, 3, 6),
+(14, 'It\'s noting like the picture', 'I look like a walking lamp, maybe I will wear it on hallowen', 2, 5, 8),
+(15, 'Nice and cheap earing', 'Nice earinig, I recommend it and would buy again from you.', 5, 2, 9),
+(16, 'Nothing like the description!', 'The product I got is not the same one is the description, and took alot of time to deliever!', 2, 3, 10),
+(17, 'Bad Quality and not durable', 'The product is made of poor materials, not worth the money', 1, 4, 11),
+(18, 'YaYa Sports', 'I like Sports and this bag is a good fit for me', 5, 5, 12),
+(20, 'Do not recommend', 'the product I recieved was in bad shape and took alot of time in delivery.', 3, 3, 14),
+(21, 'Fun and entertaining sunglasses', 'I won the hallowen contest beacuse of them.', 4, 4, 15),
+(22, 'The sizes are bit small', 'I ordered the meduim and it feels like small', 3, 5, 16),
+(23, 'Nice hat, I recommend', 'I look like my dead grandfather god bless his soul.', 4, 2, 17),
+(24, 'I like the color, Very wonderful earrings', 'Very beautiful and wonderful earrings.', 4.5, 3, 18),
+(25, 'If you like simple things, This is perfect for you', 'Very simple and modern wristwatch, I recommend buying it.', 4.5, 4, 19),
+(26, 'There was a mis up', 'I thought the product comes as crystal but got a diamond like necklace', 1, 5, 20),
+(27, 'I do not recommend buying it', 'The next dat I bought it, it got stolen beacuse its very easy to steal', 2, 2, 21),
+(28, 'Very Beautiful Earrings', 'Wonderful and Beautiful earrings, The diamond is real.', 4, 3, 22),
+(29, 'Good Backpack', 'Overall good backpack and material.', 4, 4, 23),
+(30, 'I do not recommend the product or store', 'The product I got is not the same as the picture, then I contacted the store they gave me a cheap fake bracelet, When I contacted them they said they will send me a gift but never delivered.', 1, 5, 24),
+(31, 'Good Product for a Gift', 'I used all of my last money to buy this product.', 4.5, 2, 25);
 
 -- --------------------------------------------------------
 
@@ -302,11 +320,11 @@ INSERT INTO `ratingreview` (`id`, `title`, `description`, `rating`, `userId`, `p
 --
 
 CREATE TABLE `tax` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `countryCode` varchar(2) NOT NULL,
   `countryName` varchar(50) NOT NULL,
   `taxRate` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -315,7 +333,7 @@ CREATE TABLE `tax` (
 --
 
 CREATE TABLE `user` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `firstName` varchar(25) NOT NULL,
   `lastName` varchar(25) NOT NULL,
   `email` varchar(50) NOT NULL,
@@ -324,7 +342,7 @@ CREATE TABLE `user` (
   `password` varchar(255) NOT NULL,
   `imageUrl` varchar(255) NOT NULL,
   `role` varchar(255) NOT NULL DEFAULT 'admin'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `user`
@@ -344,9 +362,9 @@ INSERT INTO `user` (`id`, `firstName`, `lastName`, `email`, `mobile`, `dateOfBir
 --
 
 CREATE TABLE `wishlist` (
-  `id` int(11) NOT NULL,
-  `userId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `id` int NOT NULL,
+  `userId` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `wishlist`
@@ -365,10 +383,10 @@ INSERT INTO `wishlist` (`id`, `userId`) VALUES
 --
 
 CREATE TABLE `wishlistitem` (
-  `id` int(11) NOT NULL,
-  `wishListId` int(11) NOT NULL,
-  `productId` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `id` int NOT NULL,
+  `wishListId` int NOT NULL,
+  `productId` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `wishlistitem`
@@ -458,9 +476,9 @@ ALTER TABLE `product`
   ADD KEY `discountId` (`discountId`);
 
 --
--- Indexes for table `ratingreview`
+-- Indexes for table `ratingReview`
 --
-ALTER TABLE `ratingreview`
+ALTER TABLE `ratingReview`
   ADD PRIMARY KEY (`id`),
   ADD KEY `userId` (`userId`),
   ADD KEY `productId` (`productId`);
@@ -501,91 +519,91 @@ ALTER TABLE `wishlistitem`
 -- AUTO_INCREMENT for table `address`
 --
 ALTER TABLE `address`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `brand`
 --
 ALTER TABLE `brand`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `cartitem`
 --
 ALTER TABLE `cartitem`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `discount`
 --
 ALTER TABLE `discount`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `order`
 --
 ALTER TABLE `order`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `orderitem`
 --
 ALTER TABLE `orderitem`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
--- AUTO_INCREMENT for table `ratingreview`
+-- AUTO_INCREMENT for table `ratingReview`
 --
-ALTER TABLE `ratingreview`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+ALTER TABLE `ratingReview`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `tax`
 --
 ALTER TABLE `tax`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `wishlist`
 --
 ALTER TABLE `wishlist`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `wishlistitem`
 --
 ALTER TABLE `wishlistitem`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Constraints for dumped tables
@@ -635,9 +653,9 @@ ALTER TABLE `product`
   ADD CONSTRAINT `product_ibfk_3` FOREIGN KEY (`discountId`) REFERENCES `discount` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `ratingreview`
+-- Constraints for table `ratingReview`
 --
-ALTER TABLE `ratingreview`
+ALTER TABLE `ratingReview`
   ADD CONSTRAINT `ratingReview_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `ratingReview_ibfk_2` FOREIGN KEY (`productId`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
