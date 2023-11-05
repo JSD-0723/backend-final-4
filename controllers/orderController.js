@@ -1,5 +1,5 @@
 // imports
-const { Cart, Order, OrderItem, Discount, Tax } = require('../models');
+const { Cart, Order, OrderItem, /*Discount,*/ Tax } = require('../models');
 const { asyncWrapper } = require('../middleware');
 const { createCustomError } = require('../utils/errors/custom-error');
 const {
@@ -72,8 +72,8 @@ const createOrder = asyncWrapper(async (req, res, next) => {
 
   // Call the function to update product stock in the cart
   await updateProductStockInCart(cartId);
-  const tax = await Tax.findByPk(taxId); 
-  
+  const tax = await Tax.findByPk(taxId);
+
   // updating the total price of order based on the taxes and delivery fees
   const totalPrice = Number(cart.totalPrice) + Number(tax.taxRate) + deliveryFee;
   // creating the order
