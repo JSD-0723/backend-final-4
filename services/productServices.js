@@ -1,8 +1,7 @@
-const { Product, Category, Brand } = require('../models');
+const { Product, Category, Brand, Image } = require('../models');
 const { development } = require('../config/config');
 const { Op } = require('sequelize');
 const sequelize = require('../utils/dataBaseConnection');
-
 
 /**
  * Retrieve a product's rating summary, including the total rating and rating count.
@@ -15,11 +14,11 @@ const getProductRatingSummary = async (product) => {
 
   const rating = reviews
     ? (reviews
-      .map((review) => review.rating)
-      .reduce((acc, current) => acc + current, 0) /
-      reviews.length /
-      5) *
-    5
+        .map((review) => review.rating)
+        .reduce((acc, current) => acc + current, 0) /
+        reviews.length /
+        5) *
+      5
     : 0;
   const totalRating = Math.round(rating * 10) / 10;
   const ratingCount = reviews ? reviews.length : 0;
@@ -38,6 +37,9 @@ const getProductRatingSummary = async (product) => {
 const generateProductResponse = async (product) => {
   const { totalRating, ratingCount } = await getProductRatingSummary(product);
 
+  const productAlterImages = Object.values(product.images);
+  const imageUrlArray = productAlterImages.map((imageObj) => imageObj.imageUrl);
+
   return {
     id: product.id,
     title: product.title,
@@ -45,6 +47,7 @@ const generateProductResponse = async (product) => {
     price: product.price,
     availableInStock: product.availableInStock,
     imageUrl: product.imageUrl,
+    images: imageUrlArray,
     category: product.category.name, // Access the category name
     brand: product.brand.name, // Access the brand name
     totalRating,
@@ -67,6 +70,7 @@ const fetchProductsWithCount = async (options, page, itemsPerPage) => {
     include: [
       { model: Category, attributes: ['name'] },
       { model: Brand, attributes: ['name'] },
+      { model: Image, attributes: ['imageUrl'] },
     ],
   });
   // const count = await Product.count({ where: options.where });
@@ -101,6 +105,7 @@ const fetchProducts = async (options, page, itemsPerPage) => {
     include: [
       { model: Category, attributes: ['name'] },
       { model: Brand, attributes: ['name'] },
+      { model: Image, attributes: ['imageUrl'] },
     ],
   });
 
@@ -129,6 +134,7 @@ const fetchProductById = async (id, options) => {
     include: [
       { model: Category, attributes: ['name'] },
       { model: Brand, attributes: ['name'] },
+      { model: Image, attributes: ['imageUrl'] },
     ],
   });
 
@@ -147,7 +153,6 @@ const fetchHandPickedProducts = async (options) => {
 
   return handPickedProducts;
 };
-
 
 /**
  * Fetch related products by the category of a given product.
@@ -173,13 +178,27 @@ const fetchRelatedProductsByProduct = async (productId, limit = 3) => {
   const relatedProducts = await Product.findAll({
     where: {
       id: { [Op.not]: productId },
-      categoryId: category.id
+      categoryId: category.id,
     },
     order: sequelize.literal('RAND()'), // Order randomly
-    limit
+    limit,
+    include: [
+      { model: Category, attributes: ['name'] },
+      { model: Brand, attributes: ['name'] },
+      { model: Image, attributes: ['imageUrl'] },
+    ],
   });
 
-  return relatedProducts;
+  // Transform the products data to include category name and brand name
+  const transformedProducts = relatedProducts.map(async (product) => {
+    // Get the totalRating and ratingCount
+    return await generateProductResponse(product);
+  });
+
+  // Wait for all promises to resolve
+  const responseData = await Promise.all(transformedProducts);
+
+  return responseData;
 };
 
 module.exports = {
@@ -187,5 +206,5 @@ module.exports = {
   fetchProductsWithCount,
   fetchProductById,
   fetchHandPickedProducts,
-  fetchRelatedProductsByProduct
+  fetchRelatedProductsByProduct,
 };
