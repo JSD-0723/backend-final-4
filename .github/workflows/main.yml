@@ -23,8 +23,8 @@ jobs:
       - name: Tear down Docker Compose
         run: docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml down
 
-  update_data:
-    name: Update Data in Clever Cloud Database
+  import_data:
+    name: Import Data in Clever Cloud Database
     runs-on: ubuntu-latest
     needs: test
     steps:
