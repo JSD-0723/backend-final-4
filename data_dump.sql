@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: b8g558yloomxczrpajro-mysql.services.clever-cloud.com:3306
--- Generation Time: Nov 05, 2023 at 11:01 AM
+-- Generation Time: Nov 07, 2023 at 02:26 PM
 -- Server version: 8.0.22-13
 -- PHP Version: 8.2.11
 
@@ -101,6 +101,20 @@ INSERT INTO `cart` (`id`, `totalPrice`, `userId`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `cartItem`
+--
+
+CREATE TABLE `cartItem` (
+  `id` int NOT NULL,
+  `price` decimal(20,2) NOT NULL,
+  `quantity` int NOT NULL,
+  `productId` int NOT NULL,
+  `cartId` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `cartitem`
 --
 
@@ -164,6 +178,18 @@ INSERT INTO `discount` (`id`, `description`, `discountPercentage`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `image`
+--
+
+CREATE TABLE `image` (
+  `id` int NOT NULL,
+  `imageUrl` varchar(255) NOT NULL,
+  `productId` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `order`
 --
 
@@ -172,12 +198,27 @@ CREATE TABLE `order` (
   `totalPrice` decimal(20,2) NOT NULL,
   `date` date DEFAULT NULL,
   `status` varchar(20) NOT NULL,
-  `tax` decimal(20,2) NOT NULL,
   `deliveryFee` decimal(20,2) NOT NULL,
   `paymentId` int NOT NULL,
   `cartId` int NOT NULL,
   `userId` int NOT NULL,
-  `addressId` int NOT NULL
+  `addressId` int NOT NULL,
+  `taxId` int NOT NULL,
+  `discountId` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orderItem`
+--
+
+CREATE TABLE `orderItem` (
+  `id` int NOT NULL,
+  `price` decimal(20,2) NOT NULL,
+  `quantity` int NOT NULL,
+  `productId` int NOT NULL,
+  `orderId` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -232,7 +273,6 @@ CREATE TABLE `product` (
   `imageUrl` varchar(255) NOT NULL,
   `categoryId` int NOT NULL,
   `brandId` int NOT NULL,
-  `discountId` int DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -241,29 +281,34 @@ CREATE TABLE `product` (
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`id`, `title`, `description`, `price`, `availableInStock`, `imageUrl`, `categoryId`, `brandId`, `discountId`, `createdAt`, `updatedAt`) VALUES
-(1, 'Classic Watch', 'A timeless piece for every occasion.', 100.00, 50, 'https://www.linjer.co/cdn/shop/products/linjer-classic-watch-38-gunmetal-black-1-front_1000x.jpg?v=1602577160', 5, 1, 3, '2023-05-23 08:08:55', '2023-11-02 13:28:23'),
-(2, 'Leather Handbag', 'Elegance in every detail, crafted with genuine leather.', 150.00, 30, 'https://atpatelier.com/cdn/shop/products/Arezzo_Brandy_Vacchetta_Handbag_Front.jpg?v=1678205144', 4, 2, 1, '2023-10-23 08:08:55', '2023-11-02 13:29:49'),
-(3, 'Aviator Sunglasses', 'Protect your eyes with style.', 60.00, 40, 'https://www.slazenger.com/images/imgzoom/75/75617266_xxl.jpg', 6, 3, 2, '2023-10-23 08:08:55', '2023-11-02 13:32:01'),
-(4, 'Fedora Hat', 'A classic accessory for a touch of sophistication.', 35.00, 25, 'https://www.bon-clic-bon-genre.us/photo/px1844-noir-1_20221026111212.jpg', 4, 1, 2, '2023-05-23 08:08:55', '2023-11-02 13:34:07'),
-(6, 'Stylish Backpack', 'Versatile and trendy, perfect for daily adventures.', 80.00, 35, 'https://cdn.thewirecutter.com/wp-content/media/2022/12/laptopbackpacks-2048px-6905.jpg?auto=webp&quality=75&width=1024', 4, 8, 2, '2023-05-23 08:08:55', '2023-11-02 13:35:57'),
-(8, 'Wide-Brim Hat', 'Stay stylish and sun-protected.', 39.99, 22, 'https://www.levinehat.com/cdn/shop/products/IMG_5170.png?v=1569966302', 4, 5, 2, '2023-10-23 08:08:55', '2023-11-02 13:40:27'),
-(9, 'Gold Earrings', 'Accentuate your look with these dazzling gold earrings.', 89.99, 18, 'https://i.pinimg.com/550x/ed/88/55/ed885578c95d42d18fac841378f80e7f.jpg', 7, 6, 1, '2023-10-23 08:08:55', '2023-11-02 13:41:39'),
-(10, 'Modern Wristwatch', 'Sleek design for the contemporary lifestyle.', 119.99, 32, 'https://www.watchtime.com/wp-content/uploads/2018/08/Jaeger-LeCoultre-Polaris-Memovox_Front-1000.jpg', 5, 4, 1, '2023-10-23 08:08:55', '2023-11-02 13:42:49'),
-(11, 'Canvas Tote Bag', 'A stylish and spacious tote for everyday use.', 49.99, 40, 'https://image.uniqlo.com/UQ/ST3/AsianCommon/imagesgoods/445076/item/goods_30_445076.jpg?width=494', 3, 7, 2, '2023-10-23 08:08:55', '2023-11-02 13:44:12'),
-(12, 'Sporty Backpack', 'Perfect for the active lifestyle, designed for comfort.', 64.99, 35, 'https://ca.targus.com/cdn/shop/products/0028543_156-sport-backpack-224802_1024x1024.png?v=1656002516', 4, 6, 3, '2023-10-23 08:08:55', '2023-11-02 13:44:50'),
-(14, 'Leather Wallet', 'Classic design with multiple compartments for your essentials.', 29.99, 50, 'https://www.tradeinn.com/f/13787/137871445/dolce---gabbana-710262-men-leather-wallet.jpg', 4, 2, 2, '2023-10-23 08:08:55', '2023-11-02 13:46:43'),
-(15, 'Retro Sunglasses', 'Channel your inner vintage with these stylish shades.', 54.99, 30, 'https://www.icing.com/dw/image/v2/BBTK_PRD/on/demandware.static/-/Sites-master-catalog/default/dw9f321d1e/images/icing/hi-res/59699_1.jpg?sw=734&sh=734&sm=fit', 6, 2, 3, '2023-05-23 08:08:55', '2023-11-02 13:48:00'),
-(16, 'Silver Cuff Bracelet', 'A statement piece to elevate your wristwear.', 69.99, 25, 'https://cdn-images.farfetch-contents.com/18/19/37/69/18193769_40365499_600.jpg', 7, 5, 2, '2023-10-23 08:08:55', '2023-11-02 13:49:01'),
-(17, 'Panama Hat', 'Stay cool and stylish under the sun.', 44.99, 28, 'https://d2mpxrrcad19ou.cloudfront.net/item_images/385535/8586910_fullsize.jpg', 4, 4, 1, '2023-10-23 08:08:55', '2023-11-02 13:56:43'),
-(18, 'Rose Gold Earrings', 'Add a touch of warmth with these elegant rose gold earrings.', 99.99, 18, 'https://cfs3.monicavinader.com/images/pdp-small-large/14347838-rp-ea-swer-ros-f1.jpg', 7, 3, 3, '2023-10-23 08:08:55', '2023-11-02 13:57:56'),
-(19, 'Minimalist Wristwatch', 'Simplicity meets sophistication in this modern timepiece.', 89.99, 32, 'https://www.linjer.co/cdn/shop/products/linjer-minimalist-watch-38-rose-gold-mocha-1-front_1000x.jpg?v=1571295293', 5, 5, 2, '2023-05-23 08:08:55', '2023-11-02 13:58:51'),
-(20, 'Crystal Pendant Necklace', 'Capture the light with this dazzling crystal pendant.', 129.99, 15, 'https://m.media-amazon.com/images/I/81k1fn921lL._AC_SL1500_.jpg', 7, 2, 1, '2023-10-23 08:08:55', '2023-11-02 14:00:08'),
-(21, 'Leather Crossbody Bag', 'Compact and versatile, perfect for on-the-go.', 74.99, 22, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5anxgeKxSACMDXs7Ly6GI5BRM2WO6HX_79A&usqp=CAU', 1, 3, 3, '2023-10-23 08:08:55', '2023-11-02 14:02:09'),
-(22, 'Diamond Stud Earrings', 'Timeless elegance with a touch of sparkle.', 149.99, 17, 'https://image.brilliantearth.com/media/product_images/25/BE304RD400_white_top.jpg', 5, 1, 1, '2023-10-23 08:08:55', '2023-11-02 14:03:14'),
-(23, 'Laptop Backpack', 'Stay organized and stylish with this tech-friendly backpack.', 89.99, 20, 'https://mt.studio.ps/web/image/product.template/2253/image_1024?unique=d6f4e12', 1, 2, 3, '2023-05-23 08:08:55', '2023-11-02 14:28:30'),
-(24, 'Gold Link Bracelet', 'Make a statement with this bold and trendy gold link bracelet.', 79.99, 19, 'https://media.tiffany.com/is/image/Tiffany/EcomItemL2/tiffany-hardwearsmall-link-bracelet-38086839_993599_ED.jpg', 5, 3, 2, '2023-10-23 08:08:55', '2023-11-02 14:53:55'),
-(25, 'Classic Aviator Sunglasses', 'Achieve a timeless look with these iconic aviator shades.', 59.99, 25, 'https://images.ray-ban.com/is/image/RayBan/805289602057__STD__shad__qt.png?impolicy=RB_Product&width=800&bgc=%23f2f2f2', 3, 1, 3, '2023-10-23 08:08:55', '2023-11-02 14:54:38');
+INSERT INTO `product` (`id`, `title`, `description`, `price`, `availableInStock`, `imageUrl`, `categoryId`, `brandId`, `createdAt`, `updatedAt`) VALUES
+(1, 'Classic Watch', 'A timeless piece for every occasion.', 100.00, 50, 'https://www.linjer.co/cdn/shop/products/linjer-classic-watch-38-gunmetal-black-1-front_1000x.jpg?v=1602577160', 5, 1, '2023-05-23 08:08:55', '2023-11-02 13:28:23'),
+(2, 'Leather Handbag', 'Elegance in every detail, crafted with genuine leather.', 150.00, 30, 'https://atpatelier.com/cdn/shop/products/Arezzo_Brandy_Vacchetta_Handbag_Front.jpg?v=1678205144', 4, 2, '2023-10-23 08:08:55', '2023-11-02 13:29:49'),
+(3, 'Aviator Sunglasses', 'Protect your eyes with style.', 60.00, 40, 'https://www.slazenger.com/images/imgzoom/75/75617266_xxl.jpg', 6, 3, '2023-10-23 08:08:55', '2023-11-02 13:32:01'),
+(4, 'Fedora Hat', 'A classic accessory for a touch of sophistication.', 35.00, 25, 'https://www.bon-clic-bon-genre.us/photo/px1844-noir-1_20221026111212.jpg', 4, 1, '2023-05-23 08:08:55', '2023-11-02 13:34:07'),
+(6, 'Stylish Backpack', 'Versatile and trendy, perfect for daily adventures.', 80.00, 35, 'https://cdn.thewirecutter.com/wp-content/media/2022/12/laptopbackpacks-2048px-6905.jpg?auto=webp&quality=75&width=1024', 4, 8, '2023-05-23 08:08:55', '2023-11-02 13:35:57'),
+(8, 'Wide-Brim Hat', 'Stay stylish and sun-protected.', 39.99, 22, 'https://www.levinehat.com/cdn/shop/products/IMG_5170.png?v=1569966302', 4, 5, '2023-10-23 08:08:55', '2023-11-02 13:40:27'),
+(9, 'Gold Earrings', 'Accentuate your look with these dazzling gold earrings.', 89.99, 18, 'https://i.pinimg.com/550x/ed/88/55/ed885578c95d42d18fac841378f80e7f.jpg', 7, 6, '2023-10-23 08:08:55', '2023-11-02 13:41:39'),
+(10, 'Modern Wristwatch', 'Sleek design for the contemporary lifestyle.', 119.99, 32, 'https://www.watchtime.com/wp-content/uploads/2018/08/Jaeger-LeCoultre-Polaris-Memovox_Front-1000.jpg', 5, 4, '2023-10-23 08:08:55', '2023-11-02 13:42:49'),
+(11, 'Canvas Tote Bag', 'A stylish and spacious tote for everyday use.', 49.99, 40, 'https://image.uniqlo.com/UQ/ST3/AsianCommon/imagesgoods/445076/item/goods_30_445076.jpg?width=494', 3, 7, '2023-10-23 08:08:55', '2023-11-02 13:44:12'),
+(12, 'Sporty Backpack', 'Perfect for the active lifestyle, designed for comfort.', 64.99, 35, 'https://ca.targus.com/cdn/shop/products/0028543_156-sport-backpack-224802_1024x1024.png?v=1656002516', 4, 6, '2023-10-23 08:08:55', '2023-11-02 13:44:50'),
+(14, 'Leather Wallet', 'Classic design with multiple compartments for your essentials.', 29.99, 50, 'https://www.tradeinn.com/f/13787/137871445/dolce---gabbana-710262-men-leather-wallet.jpg', 4, 2, '2023-10-23 08:08:55', '2023-11-02 13:46:43'),
+(15, 'Retro Sunglasses', 'Channel your inner vintage with these stylish shades.', 54.99, 30, 'https://www.icing.com/dw/image/v2/BBTK_PRD/on/demandware.static/-/Sites-master-catalog/default/dw9f321d1e/images/icing/hi-res/59699_1.jpg?sw=734&sh=734&sm=fit', 6, 2, '2023-05-23 08:08:55', '2023-11-02 13:48:00'),
+(16, 'Silver Cuff Bracelet', 'A statement piece to elevate your wristwear.', 69.99, 25, 'https://cdn-images.farfetch-contents.com/18/19/37/69/18193769_40365499_600.jpg', 7, 5, '2023-10-23 08:08:55', '2023-11-02 13:49:01'),
+(17, 'Panama Hat', 'Stay cool and stylish under the sun.', 44.99, 28, 'https://d2mpxrrcad19ou.cloudfront.net/item_images/385535/8586910_fullsize.jpg', 4, 4, '2023-10-23 08:08:55', '2023-11-02 13:56:43'),
+(18, 'Rose Gold Earrings', 'Add a touch of warmth with these elegant rose gold earrings.', 99.99, 18, 'https://cfs3.monicavinader.com/images/pdp-small-large/14347838-rp-ea-swer-ros-f1.jpg', 7, 3, '2023-10-23 08:08:55', '2023-11-02 13:57:56'),
+(19, 'Minimalist Wristwatch', 'Simplicity meets sophistication in this modern timepiece.', 89.99, 32, 'https://www.linjer.co/cdn/shop/products/linjer-minimalist-watch-38-rose-gold-mocha-1-front_1000x.jpg?v=1571295293', 5, 5, '2023-05-23 08:08:55', '2023-11-02 13:58:51'),
+(20, 'Crystal Pendant Necklace', 'Capture the light with this dazzling crystal pendant.', 129.99, 15, 'https://m.media-amazon.com/images/I/81k1fn921lL._AC_SL1500_.jpg', 7, 2, '2023-10-23 08:08:55', '2023-11-02 14:00:08'),
+(21, 'Leather Crossbody Bag', 'Compact and versatile, perfect for on-the-go.', 74.99, 22, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5anxgeKxSACMDXs7Ly6GI5BRM2WO6HX_79A&usqp=CAU', 3, 3, '2023-10-23 08:08:55', '2023-11-02 14:02:09'),
+(22, 'Diamond Stud Earrings', 'Timeless elegance with a touch of sparkle.', 149.99, 17, 'https://image.brilliantearth.com/media/product_images/25/BE304RD400_white_top.jpg', 7, 1, '2023-10-23 08:08:55', '2023-11-02 14:03:14'),
+(23, 'Laptop Backpack', 'Stay organized and stylish with this tech-friendly backpack.', 89.99, 20, 'https://mt.studio.ps/web/image/product.template/2253/image_1024?unique=d6f4e12', 4, 2, '2023-05-23 08:08:55', '2023-11-02 14:28:30'),
+(24, 'Gold Link Bracelet', 'Make a statement with this bold and trendy gold link bracelet.', 79.99, 19, 'https://media.tiffany.com/is/image/Tiffany/EcomItemL2/tiffany-hardwearsmall-link-bracelet-38086839_993599_ED.jpg', 5, 3, '2023-10-23 08:08:55', '2023-11-02 14:53:55'),
+(25, 'Classic Aviator Sunglasses', 'Achieve a timeless look with these iconic aviator shades.', 59.99, 25, 'https://images.ray-ban.com/is/image/RayBan/805289602057__STD__shad__qt.png?impolicy=RB_Product&width=800&bgc=%23f2f2f2', 4, 1, '2023-10-23 08:08:55', '2023-11-02 14:54:38'),
+(26, 'Hydrated Ever After Skincare Mini Kit', 'This skincare kit has all of your favorite Holy Hydration necessities- a Holy Hydration! Daily Cleanser, Holy Hydration! Makeup Melting Cleansing Balm, Hydrating Booster Drops, Holy Hydration! Face Cream & Eye Cream.', 19.90, 15, 'https://m.media-amazon.com/images/I/71sluGVCHgL._SL1500_.jpg', 1, 6, '2023-11-07 14:04:14', '2023-11-07 14:04:14'),
+(27, 'Ice Roller for Face and Eye', 'Suitable for all types of skin. treat acne and sensitive skin, reduce redness & swelling, remove edema, puffiness and fine lines, smooth skin, improve skin problems, body massage care. It has multiple functions such as cleansing ,beauty, stimulates blood circulation and physical cooling when you have a fever.', 8.99, 10, 'https://m.media-amazon.com/images/I/512xda4M6YL._SL1500_.jpg', 1, 3, '2023-11-07 14:04:14', '2023-11-07 14:04:14'),
+(30, 'Manicure Set Personal Care Nail Clipper Kit', 'Manicure Set: Professional Manicure Kit Contains nail and toenail tools, Multifunctiona includes hand care, facial care, and foot care tools.', 7.98, 15, 'https://m.media-amazon.com/images/I/71rH7dutmSL._SL1500_.jpg', 2, 5, '2023-11-07 14:12:12', '2023-11-07 14:12:12'),
+(31, 'Gift Baskets for Women', 'Beauty Kits for Women - Elevate your self-care routine with our all-inclusive 13-piece beauty kit for women, offering premium skin care for teen girls and all women alike. Experience a luxurious, retro-themed spa day at home.', 64.97, 15, 'https://m.media-amazon.com/images/I/91FTEvRP-hL._SL1500_.jpg', 2, 6, '2023-11-07 14:12:12', '2023-11-07 14:12:12'),
+(32, 'Gift Baskets for Women, Beauty Kit for Women', 'Beauty Kits for Women - Elevate your self-care routine with our all-inclusive 13-piece beauty kit for women, offering premium skin care for teen girls and all women alike. Experience a luxurious, retro-themed spa day at home.', 64.97, 15, 'https://m.media-amazon.com/images/I/91FTEvRP-hL._SL1500_.jpg', 2, 7, '2023-11-07 14:21:20', '2023-11-07 14:21:20');
 
 -- --------------------------------------------------------
 
@@ -324,7 +369,7 @@ CREATE TABLE `tax` (
   `countryCode` varchar(2) NOT NULL,
   `countryName` varchar(50) NOT NULL,
   `taxRate` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -358,6 +403,17 @@ INSERT INTO `user` (`id`, `firstName`, `lastName`, `email`, `mobile`, `dateOfBir
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `wishList`
+--
+
+CREATE TABLE `wishList` (
+  `id` int NOT NULL,
+  `userId` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `wishlist`
 --
 
@@ -375,6 +431,18 @@ INSERT INTO `wishlist` (`id`, `userId`) VALUES
 (3, 3),
 (4, 4),
 (5, 5);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wishListItem`
+--
+
+CREATE TABLE `wishListItem` (
+  `id` int NOT NULL,
+  `wishListId` int NOT NULL,
+  `productId` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -423,6 +491,14 @@ ALTER TABLE `cart`
   ADD KEY `userId` (`userId`);
 
 --
+-- Indexes for table `cartItem`
+--
+ALTER TABLE `cartItem`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `productId` (`productId`),
+  ADD KEY `cartId` (`cartId`);
+
+--
 -- Indexes for table `cartitem`
 --
 ALTER TABLE `cartitem`
@@ -443,6 +519,13 @@ ALTER TABLE `discount`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `image`
+--
+ALTER TABLE `image`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `productId` (`productId`);
+
+--
 -- Indexes for table `order`
 --
 ALTER TABLE `order`
@@ -450,7 +533,17 @@ ALTER TABLE `order`
   ADD KEY `paymentId` (`paymentId`),
   ADD KEY `cartId` (`cartId`),
   ADD KEY `userId` (`userId`),
-  ADD KEY `addressId` (`addressId`);
+  ADD KEY `addressId` (`addressId`),
+  ADD KEY `taxId` (`taxId`),
+  ADD KEY `discountId` (`discountId`);
+
+--
+-- Indexes for table `orderItem`
+--
+ALTER TABLE `orderItem`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `productId` (`productId`),
+  ADD KEY `orderId` (`orderId`);
 
 --
 -- Indexes for table `orderitem`
@@ -472,8 +565,7 @@ ALTER TABLE `payment`
 ALTER TABLE `product`
   ADD PRIMARY KEY (`id`),
   ADD KEY `categoryId` (`categoryId`),
-  ADD KEY `brandId` (`brandId`),
-  ADD KEY `discountId` (`discountId`);
+  ADD KEY `brandId` (`brandId`);
 
 --
 -- Indexes for table `ratingReview`
@@ -497,11 +589,26 @@ ALTER TABLE `user`
   ADD UNIQUE KEY `email` (`email`);
 
 --
+-- Indexes for table `wishList`
+--
+ALTER TABLE `wishList`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `userId` (`userId`);
+
+--
 -- Indexes for table `wishlist`
 --
 ALTER TABLE `wishlist`
   ADD PRIMARY KEY (`id`),
   ADD KEY `userId` (`userId`);
+
+--
+-- Indexes for table `wishListItem`
+--
+ALTER TABLE `wishListItem`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `wishListId` (`wishListId`),
+  ADD KEY `productId` (`productId`);
 
 --
 -- Indexes for table `wishlistitem`
@@ -534,6 +641,12 @@ ALTER TABLE `cart`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `cartItem`
+--
+ALTER TABLE `cartItem`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `cartitem`
 --
 ALTER TABLE `cartitem`
@@ -552,10 +665,22 @@ ALTER TABLE `discount`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `image`
+--
+ALTER TABLE `image`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `order`
 --
 ALTER TABLE `order`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `orderItem`
+--
+ALTER TABLE `orderItem`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `orderitem`
@@ -573,7 +698,7 @@ ALTER TABLE `payment`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `ratingReview`
@@ -594,10 +719,22 @@ ALTER TABLE `user`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `wishList`
+--
+ALTER TABLE `wishList`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `wishlist`
 --
 ALTER TABLE `wishlist`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `wishListItem`
+--
+ALTER TABLE `wishListItem`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `wishlistitem`
@@ -622,11 +759,17 @@ ALTER TABLE `cart`
   ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `cartitem`
+-- Constraints for table `cartItem`
 --
-ALTER TABLE `cartitem`
+ALTER TABLE `cartItem`
   ADD CONSTRAINT `cartItem_ibfk_1` FOREIGN KEY (`productId`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `cartItem_ibfk_2` FOREIGN KEY (`cartId`) REFERENCES `cart` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `image`
+--
+ALTER TABLE `image`
+  ADD CONSTRAINT `image_ibfk_1` FOREIGN KEY (`productId`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `order`
@@ -635,12 +778,14 @@ ALTER TABLE `order`
   ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`paymentId`) REFERENCES `payment` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `order_ibfk_2` FOREIGN KEY (`cartId`) REFERENCES `cart` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `order_ibfk_3` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `order_ibfk_4` FOREIGN KEY (`addressId`) REFERENCES `address` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `order_ibfk_4` FOREIGN KEY (`addressId`) REFERENCES `address` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `order_ibfk_5` FOREIGN KEY (`taxId`) REFERENCES `tax` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `order_ibfk_6` FOREIGN KEY (`discountId`) REFERENCES `discount` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
--- Constraints for table `orderitem`
+-- Constraints for table `orderItem`
 --
-ALTER TABLE `orderitem`
+ALTER TABLE `orderItem`
   ADD CONSTRAINT `orderItem_ibfk_1` FOREIGN KEY (`productId`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `orderItem_ibfk_2` FOREIGN KEY (`orderId`) REFERENCES `order` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -649,8 +794,7 @@ ALTER TABLE `orderitem`
 --
 ALTER TABLE `product`
   ADD CONSTRAINT `product_ibfk_1` FOREIGN KEY (`categoryId`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `product_ibfk_2` FOREIGN KEY (`brandId`) REFERENCES `brand` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `product_ibfk_3` FOREIGN KEY (`discountId`) REFERENCES `discount` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `product_ibfk_2` FOREIGN KEY (`brandId`) REFERENCES `brand` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `ratingReview`
@@ -660,16 +804,16 @@ ALTER TABLE `ratingReview`
   ADD CONSTRAINT `ratingReview_ibfk_2` FOREIGN KEY (`productId`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `wishlist`
+-- Constraints for table `wishList`
 --
-ALTER TABLE `wishlist`
+ALTER TABLE `wishList`
   ADD CONSTRAINT `wishList_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `wishlistitem`
+-- Constraints for table `wishListItem`
 --
-ALTER TABLE `wishlistitem`
-  ADD CONSTRAINT `wishListItem_ibfk_1` FOREIGN KEY (`wishListId`) REFERENCES `wishlist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ALTER TABLE `wishListItem`
+  ADD CONSTRAINT `wishListItem_ibfk_1` FOREIGN KEY (`wishListId`) REFERENCES `wishList` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `wishListItem_ibfk_2` FOREIGN KEY (`productId`) REFERENCES `product` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
