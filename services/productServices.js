@@ -108,7 +108,7 @@ const fetchProducts = async (options, page, itemsPerPage) => {
     include: [
       { model: Category, attributes: ['name'] },
       { model: Brand, attributes: ['name'] },
-      { model: Image, attributes: ['imageUrl'] },
+      // { model: Image, attributes: ['imageUrl'] },
     ],
   });
 
@@ -137,7 +137,7 @@ const fetchProductById = async (id, options) => {
     include: [
       { model: Category, attributes: ['name'] },
       { model: Brand, attributes: ['name'] },
-      { model: Image, attributes: ['imageUrl'] },
+      // { model: Image, attributes: ['imageUrl'] },
     ],
   });
 
@@ -195,7 +195,6 @@ const fetchRelatedProductsByProduct = async (productId, limit = 3) => {
     include: [
       { model: Category, attributes: ['name'] },
       { model: Brand, attributes: ['name'] },
-      { model: Image, attributes: ['imageUrl'] },
     ],
   });
 
