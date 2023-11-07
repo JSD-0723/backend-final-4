@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: b8g558yloomxczrpajro-mysql.services.clever-cloud.com:3306
--- Generation Time: Nov 07, 2023 at 02:26 PM
+-- Generation Time: Nov 07, 2023 at 03:54 PM
 -- Server version: 8.0.22-13
 -- PHP Version: 8.2.11
 
@@ -115,20 +115,6 @@ CREATE TABLE `cartItem` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cartitem`
---
-
-CREATE TABLE `cartitem` (
-  `id` int NOT NULL,
-  `price` decimal(20,2) NOT NULL,
-  `quantity` int NOT NULL,
-  `productId` int NOT NULL,
-  `cartId` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `category`
 --
 
@@ -214,20 +200,6 @@ CREATE TABLE `order` (
 --
 
 CREATE TABLE `orderItem` (
-  `id` int NOT NULL,
-  `price` decimal(20,2) NOT NULL,
-  `quantity` int NOT NULL,
-  `productId` int NOT NULL,
-  `orderId` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `orderitem`
---
-
-CREATE TABLE `orderitem` (
   `id` int NOT NULL,
   `price` decimal(20,2) NOT NULL,
   `quantity` int NOT NULL,
@@ -434,22 +406,11 @@ CREATE TABLE `wishList` (
   `userId` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `wishlist`
+-- Dumping data for table `wishList`
 --
 
-CREATE TABLE `wishlist` (
-  `id` int NOT NULL,
-  `userId` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `wishlist`
---
-
-INSERT INTO `wishlist` (`id`, `userId`) VALUES
+INSERT INTO `wishList` (`id`, `userId`) VALUES
 (2, 2),
 (3, 3),
 (4, 4),
@@ -466,28 +427,6 @@ CREATE TABLE `wishListItem` (
   `wishListId` int NOT NULL,
   `productId` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `wishlistitem`
---
-
-CREATE TABLE `wishlistitem` (
-  `id` int NOT NULL,
-  `wishListId` int NOT NULL,
-  `productId` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `wishlistitem`
---
-
-INSERT INTO `wishlistitem` (`id`, `wishListId`, `productId`) VALUES
-(1, 2, 3),
-(2, 3, 3),
-(4, 4, 3),
-(5, 5, 3);
 
 --
 -- Indexes for dumped tables
@@ -517,14 +456,6 @@ ALTER TABLE `cart`
 -- Indexes for table `cartItem`
 --
 ALTER TABLE `cartItem`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `productId` (`productId`),
-  ADD KEY `cartId` (`cartId`);
-
---
--- Indexes for table `cartitem`
---
-ALTER TABLE `cartitem`
   ADD PRIMARY KEY (`id`),
   ADD KEY `productId` (`productId`),
   ADD KEY `cartId` (`cartId`);
@@ -564,14 +495,6 @@ ALTER TABLE `order`
 -- Indexes for table `orderItem`
 --
 ALTER TABLE `orderItem`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `productId` (`productId`),
-  ADD KEY `orderId` (`orderId`);
-
---
--- Indexes for table `orderitem`
---
-ALTER TABLE `orderitem`
   ADD PRIMARY KEY (`id`),
   ADD KEY `productId` (`productId`),
   ADD KEY `orderId` (`orderId`);
@@ -619,24 +542,9 @@ ALTER TABLE `wishList`
   ADD KEY `userId` (`userId`);
 
 --
--- Indexes for table `wishlist`
---
-ALTER TABLE `wishlist`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `userId` (`userId`);
-
---
 -- Indexes for table `wishListItem`
 --
 ALTER TABLE `wishListItem`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `wishListId` (`wishListId`),
-  ADD KEY `productId` (`productId`);
-
---
--- Indexes for table `wishlistitem`
---
-ALTER TABLE `wishlistitem`
   ADD PRIMARY KEY (`id`),
   ADD KEY `wishListId` (`wishListId`),
   ADD KEY `productId` (`productId`);
@@ -670,12 +578,6 @@ ALTER TABLE `cartItem`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `cartitem`
---
-ALTER TABLE `cartitem`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
@@ -704,12 +606,6 @@ ALTER TABLE `order`
 --
 ALTER TABLE `orderItem`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `orderitem`
---
-ALTER TABLE `orderitem`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `payment`
@@ -745,25 +641,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `wishList`
 --
 ALTER TABLE `wishList`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `wishlist`
---
-ALTER TABLE `wishlist`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `wishListItem`
 --
 ALTER TABLE `wishListItem`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `wishlistitem`
---
-ALTER TABLE `wishlistitem`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Constraints for dumped tables
