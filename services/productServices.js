@@ -1,4 +1,4 @@
-const { Product, Category, Brand, Image } = require('../models');
+const { Product, Category, Brand, Image, RatingReview } = require('../models');
 const { development } = require('../config/config');
 const { Op } = require('sequelize');
 const sequelize = require('../utils/dataBaseConnection');
@@ -10,7 +10,9 @@ const sequelize = require('../utils/dataBaseConnection');
  * @returns {Promise<{totalRating: number, ratingCount: number}>} An object containing the total rating and rating count.
  */
 const getProductRatingSummary = async (product) => {
-  const reviews = await product.getRatingReviews();
+  const reviews = await RatingReview.findAll({
+    where: { productId: product.id },
+  });
 
   const rating = reviews
     ? (reviews
@@ -37,8 +39,10 @@ const getProductRatingSummary = async (product) => {
 const generateProductResponse = async (product) => {
   const { totalRating, ratingCount } = await getProductRatingSummary(product);
 
-  const productAlterImages = Object.values(product.images);
-  const imageUrlArray = productAlterImages.map((imageObj) => imageObj.imageUrl);
+  const images = await Image.findAll({
+    where: { productId: product.id },
+    attributes: ['imageUrl'],
+  });
 
   return {
     id: product.id,
@@ -47,9 +51,9 @@ const generateProductResponse = async (product) => {
     price: product.price,
     availableInStock: product.availableInStock,
     imageUrl: product.imageUrl,
-    images: imageUrlArray,
-    category: product.category.name, // Access the category name
-    brand: product.brand.name, // Access the brand name
+    images: images,
+    category: product.category.name,
+    brand: product.brand.name,
     totalRating,
     ratingCount,
   };
@@ -63,6 +67,7 @@ const generateProductResponse = async (product) => {
  */
 const fetchProductsWithCount = async (options, page, itemsPerPage) => {
   const offset = (page - 1) * itemsPerPage;
+  console.log({ ...options });
   const { count, rows } = await Product.findAndCountAll({
     ...options,
     limit: itemsPerPage,
@@ -70,10 +75,8 @@ const fetchProductsWithCount = async (options, page, itemsPerPage) => {
     include: [
       { model: Category, attributes: ['name'] },
       { model: Brand, attributes: ['name'] },
-      { model: Image, attributes: ['imageUrl'] },
     ],
   });
-  // const count = await Product.count({ where: options.where });
 
   // Transform the products data to include category name and brand name
   const transformedProducts = rows.map(async (product) => {
@@ -126,7 +129,7 @@ const fetchProducts = async (options, page, itemsPerPage) => {
  *
  * @param {number} id - The ID of the product to fetch.
  * @param {object} options - Options for querying the product.
- * @returns {Promise<object>} A structured response object containing product details and rating summary.
+ * @returns {Promise<{products: object[]}>} A structured response object containing product details and rating summary.
  */
 const fetchProductById = async (id, options) => {
   const product = await Product.findByPk(id, {
@@ -141,6 +144,13 @@ const fetchProductById = async (id, options) => {
   return await generateProductResponse(product);
 };
 
+/**
+ * Fetch a product by its handpicked availability.
+ *
+ *
+ * @param {object} options - Options for querying the product.
+ * @returns {Array<object>} A structured response object containing product details and rating summary.
+ */
 const fetchHandPickedProducts = async (options) => {
   const products = await fetchProductsWithCount({
     ...options,
