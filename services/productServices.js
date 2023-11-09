@@ -44,6 +44,8 @@ const generateProductResponse = async (product) => {
     attributes: ['imageUrl'],
   });
 
+  const imageUrlArray = images.map((image) => image.imageUrl);
+
   return {
     id: product.id,
     title: product.title,
@@ -51,7 +53,7 @@ const generateProductResponse = async (product) => {
     price: product.price,
     availableInStock: product.availableInStock,
     imageUrl: product.imageUrl,
-    images: images,
+    images: imageUrlArray,
     category: product.category.name,
     brand: product.brand.name,
     totalRating,
