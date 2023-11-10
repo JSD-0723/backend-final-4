@@ -1,7 +1,6 @@
 const { asyncWrapper } = require('../middleware');
 const { createCustomError } = require('../utils/errors/custom-error');
 const { Brand } = require('../models');
-const { ProductService } = require('../services');
 
 /**
  * Fetches all brands from the database.
@@ -44,15 +43,11 @@ const getBrand = asyncWrapper(async (req, res, next) => {
 
   // If the brand is not found, log and return a custom error
   if (brand) {
-    const { products } = await ProductService.fetchProductsWithCount({
-      where: { brandId: id },
-    });
-
     // Send a success response with the fetched brand and associated products
     res.status(200).json({
       success: true,
       message: `Brand and products successfully fetched`,
-      data: { brand, products },
+      data: { brand },
     });
   } else {
     // If the brand is not found, invoke the next middleware with a custom error

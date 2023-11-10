@@ -1,7 +1,6 @@
 const { asyncWrapper } = require('../middleware');
 const { createCustomError } = require('../utils/errors/custom-error');
 const { Category } = require('../models');
-const { ProductService } = require('../services');
 
 /**
  * Fetches all categories from the database.
@@ -55,16 +54,11 @@ const getCategory = asyncWrapper(async (req, res, next) => {
 
   console.log('Fetched Category: ', category?.name);
   if (category) {
-    const { products } = await ProductService.fetchProductsWithCount({
-      where: { categoryId: id },
-    });
-
-    console.log('Fetched Products Successfully');
     // Send a response with category and associated products
     return res.status(200).json({
       success: true,
       message: `Category and products successfully fetched`,
-      data: { category, products },
+      data: { category },
     });
   } else {
     // If the category is not found, invoke the next middleware with a custom error
