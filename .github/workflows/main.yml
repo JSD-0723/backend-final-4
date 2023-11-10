@@ -13,13 +13,13 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
-  
+
+      - name: Install Liquid templating engine from GitHub Packages registry
+        run: npm install liquid-engine@latest --registry https://npm.pkg.github.com/${GITHUB_REPOSITORY}
+
       - name: Install Render CLI
         run: npm install -g render-cli
-  
-      - name: Install Liquid templating engine
-        run: npm install liquid-engine
-  
+
       - name: Deploy to Render
         run: |
           render login --api-key ${{ secrets.RENDER_TOKEN }}
