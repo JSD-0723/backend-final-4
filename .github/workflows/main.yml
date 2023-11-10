@@ -13,12 +13,11 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
-  
+
       - name: Install Render CLI
-        run: npm run install-render-cli
-  
+        run: npm install -g render-cli
+
       - name: Deploy to Render
         run: |
-          npx render login --account-token ${{ secrets.RENDER_TOKEN }}
-          npx render deploy --image atallah0/backend-final-4-app:${{ steps.meta.outputs.tags }} --config docker-compose.app.yaml
-
+          render login --account-token ${{ secrets.RENDER_TOKEN }}
+          render deploy --image atallah0/backend-final-4-app:${{ steps.meta.outputs.tags }} --config docker-compose.app.yaml
