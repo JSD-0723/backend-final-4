@@ -76,6 +76,11 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
 
+      - name: Install Render CLI
+        run: |
+          curl -o /usr/local/bin/render https://render.com/gp/render-cli-linux
+          chmod +x /usr/local/bin/render
+
       - name: Deploy to Render
         run: |
           render login --account-token ${{ secrets.RENDER_TOKEN }}
