@@ -123,7 +123,7 @@ const productSearchRules = () => {
       .optional()
       .default(false)
       .isBoolean(),
-    query('limitedEdition', 'limitedEdition query must be boolean')
+    query('limited', 'limitedEdition query must be boolean')
       .optional()
       .default(false)
       .isBoolean(),

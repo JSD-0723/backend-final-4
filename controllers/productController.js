@@ -49,8 +49,6 @@ const createProduct = asyncWrapper(async (req, res, next) => {
     description,
     price,
     availableInStock,
-    totalRating,
-    ratingCount,
     imageUrl,
     categoryId,
     brandId,
@@ -175,7 +173,9 @@ const getProduct = asyncWrapper(async (req, res, next) => {
     });
 
     // Fetch related products
-    const relatedProducts = await ProductService.fetchRelatedProductsByProduct(id);
+    const relatedProducts = await ProductService.fetchRelatedProductsByProduct(
+      id
+    );
     // Send a response with product and associated ratingReviews
     return res.status(200).json({
       success: true,
@@ -183,7 +183,7 @@ const getProduct = asyncWrapper(async (req, res, next) => {
       data: {
         product: product,
         ratingReviews,
-        relatedProducts
+        relatedProducts,
       },
     });
   } else {
@@ -284,7 +284,7 @@ const searchProducts = asyncWrapper(async (req, res, next) => {
     rating,
     ratingType, // "above" or "less"
     newArrival,
-    limitedEdition,
+    limited,
     handpickedProducts,
   } = req.query;
   const page = req.query.page ? parseInt(req.query.page) : 1;
@@ -313,7 +313,7 @@ const searchProducts = asyncWrapper(async (req, res, next) => {
     };
   }
 
-  if (limitedEdition) {
+  if (limited) {
     searchCriteria.availableInStock = { [Op.lt]: 20 };
   }
 
@@ -409,7 +409,8 @@ const searchProducts = asyncWrapper(async (req, res, next) => {
 
   // Log the products matching the keyword, category, or brand, and send a response
   console.log(
-    `Products matching ${{ ...req.query }} have been called, products length= ${products.length
+    `Products matching ${{ ...req.query }} have been called, products length= ${
+      products.length
     }`
   );
   res.status(200).json({
