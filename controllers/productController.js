@@ -18,8 +18,6 @@ const createProduct = asyncWrapper(async (req, res, next) => {
     description,
     price,
     availableInStock,
-    totalRating,
-    ratingCount,
     imageUrl,
     categoryId,
     brandId,
