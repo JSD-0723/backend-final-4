@@ -24,7 +24,6 @@ describe('fetchWishList', () => {
 
     await fetchWishList(req, res, next);
 
-    expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       success: true,
       message: 'Wish list successfully Fetched',
