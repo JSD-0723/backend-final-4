@@ -5,7 +5,7 @@ services:
   app:
     build: .
     ports:
-      - "5000:5000"
+      - "80:5000" # Expose the Node.js application on port 80
     environment:
       - DB_HOST=db
       - DB_USER=root
@@ -16,6 +16,16 @@ services:
     depends_on:
       - db
       - phpmyadmin
-    command: sh -c 'sleep 40 && npm start'
+    command: npm start # Adjust the Node.js command
     links:
       - db
+    healthcheck:
+      # Set up a health check for the Node.js application
+      test: [ "CMD-SHELL", "curl -f http://localhost/ || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  backend-final:
+    driver: bridge
