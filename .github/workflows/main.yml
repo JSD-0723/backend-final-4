@@ -20,4 +20,4 @@ jobs:
       - name: Deploy to Render
         run: |
           render login --account-token ${{ secrets.RENDER_TOKEN }}
-          render deploy --image atallah0/backend-final-4-app:${{ steps.meta.outputs.tags }} --config docker-compose.app.yaml --engine liquid
+          render deploy --image atallah0/backend-final-4-app:${{ steps.meta.outputs.tags }} --config docker-compose.app.yaml --engine none
