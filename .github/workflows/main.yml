@@ -11,15 +11,17 @@ jobs:
     name: Deploy to Render
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v3
-
-      - name: Install Liquid engine
-        run: npm install liquid-engine@latest
-
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+  
+      - name: Install Liquid templating engine from GitHub Packages registry
+        run: npm install liquid-engine@latest --registry https://npm.pkg.github.com/${GITHUB_REPOSITORY}
+  
       - name: Install Render CLI
         run: npm install -g render-cli
-
+  
       - name: Deploy to Render
         run: |
           render login --api-key ${{ secrets.RENDER_TOKEN }}
