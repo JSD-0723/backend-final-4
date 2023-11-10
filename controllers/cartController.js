@@ -19,7 +19,12 @@ const fetchCart = asyncWrapper(async (req, res, next) => {
     where: {
       userId: userId,
     },
-    include: CartItem,
+    include: [
+      {
+        model: CartItem,
+        include: Product, // Include the Product model associated with CartItem
+      },
+    ],
   });
 
   // If the cart is not found return error
