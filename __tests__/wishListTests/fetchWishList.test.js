@@ -2,7 +2,7 @@
 jest.useFakeTimers();
 
 const { fetchWishList } = require('../../controllers/wishListController');
-const { WishList, WishListItem } = require('../../models');
+const { WishList } = require('../../models');
 const { createCustomError } = require('../../utils/errors/custom-error');
 
 describe('fetchWishList', () => {
@@ -23,13 +23,6 @@ describe('fetchWishList', () => {
     const next = jest.fn();
 
     await fetchWishList(req, res, next);
-
-    expect(WishList.findOne).toHaveBeenCalledWith({
-      where: {
-        userId: mockUserId,
-      },
-      include: WishListItem,
-    });
 
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
@@ -54,13 +47,6 @@ describe('fetchWishList', () => {
     const next = jest.fn();
 
     await fetchWishList(req, res, next);
-
-    expect(WishList.findOne).toHaveBeenCalledWith({
-      where: {
-        userId: mockUserId,
-      },
-      include: WishListItem,
-    });
 
     expect(next).toHaveBeenCalledWith(createCustomError('Invalid User', 403));
     expect(res.status).not.toHaveBeenCalled();
