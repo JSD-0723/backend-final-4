@@ -6,18 +6,64 @@ on:
     branches: ['main']
 
 jobs:
-  deploy_to_render:
-    name: Deploy to Render
+  test:
+    name: Run Jest Tests
     runs-on: ubuntu-latest
     steps:
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16.x'
-  
-      - name: Install Render CLI
-        run: npm install -g render-cli
-  
-      - name: Deploy to Render
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Compose
+        run: docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml up -d
+
+      - name: Run Jest Tests
         run: |
-          render deploy --image atallah0/backend-final-4-app:${{ steps.meta.outputs.tags }} --config docker-compose.app.yaml
+          docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml run --rm app npm test
+
+      - name: Tear down Docker Compose
+        run: docker-compose -f docker-compose.dependencies.yaml -f docker-compose.app.yaml down
+
+  # import_data:
+  #   name: Import Data in Clever Cloud Database
+  #   runs-on: ubuntu-latest
+  #   needs: test
+  #   steps:
+  #     - name: Check out the repo
+  #       uses: actions/checkout@v3
+
+  #     - name: Import Data into Clever Cloud Database
+  #       run: |
+  #         mysql -h$CLEVER_CLOUD_DB_HOST -u$CLEVER_CLOUD_DB_USER -p$CLEVER_CLOUD_DB_PASSWORD $CLEVER_CLOUD_DB_NAME < data_dump.sql
+  #       env:
+  #         CLEVER_CLOUD_DB_HOST: ${{ secrets.CLEVER_CLOUD_DB_HOST }}
+  #         CLEVER_CLOUD_DB_USER: ${{ secrets.CLEVER_CLOUD_DB_USER }}
+  #         CLEVER_CLOUD_DB_PASSWORD: ${{ secrets.CLEVER_CLOUD_DB_PASSWORD }}
+  #         CLEVER_CLOUD_DB_NAME: ${{ secrets.CLEVER_CLOUD_DB_NAME }}
+
+  push_to_registry:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: atallah0/backend-final-4-app
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
