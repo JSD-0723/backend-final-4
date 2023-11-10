@@ -1,5 +1,5 @@
 // Import necessary modules and dependencies
-const { WishList, WishListItem, User } = require('../models');
+const { WishList, WishListItem, User, Product } = require('../models');
 const { asyncWrapper } = require('../middleware');
 const { createCustomError } = require('../utils/errors/custom-error');
 
@@ -21,7 +21,12 @@ const fetchWishList = asyncWrapper(async (req, res, next) => {
     where: {
       userId: userId,
     },
-    include: WishListItem,
+    include: [
+      {
+        model: WishListItem,
+        include: Product, // Include the Product model associated with CartItem
+      },
+    ],
   });
 
   // If the cart is not found return error
