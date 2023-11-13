@@ -1,24 +1,37 @@
-# main.yaml
-name: Build, Test, and Update Data
+name: Update Render deployment
 
 on:
   push:
-    branches: ['main']
+    branches:
+      - main
 
 jobs:
-  update_deployment:
-    name: Update Render Deployment
+  update-deployment:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check out the repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install Render CLI
-        run: |
-          curl -o render https://render.com/static/render-cli-linux
-          chmod +x render
-          sudo mv render /usr/local/bin/
+      - name: Authenticate with Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Deploy to Render
+      - name: Build Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: docker.io/atallah0/backend-final-4-app:latest
+
+      - name: Update Render deployment
         run: |
-          render deploy --image atallah0/backend-final-4-app:${{ steps.meta.outputs.tags }} --config docker-compose.app.yaml
+          curl -X PUT https://api.render.com/v1/deploys/${{ secrets.DEPLOYMENT_ID }} \
+            -H "Authorization: Bearer ${{ secrets.RENDER_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "image": "docker.io/atallah0/backend-final-4-app:latest"
+            }'
