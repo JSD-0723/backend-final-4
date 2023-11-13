@@ -16,9 +16,6 @@ jobs:
       - name: Install Render CLI
         run: npm install -g render-cli
 
-      - name: Login to Render
-        run: render login
-
       - name: Update Render Deployment
         id: update
         run: |
