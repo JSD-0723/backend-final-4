@@ -6,21 +6,26 @@ on:
     branches: ['main']
 
 jobs:
-  render_auto_update:
-    name: Auto-update Render Deployment
+  update_deployment:
+    name: Update Render Deployment
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
-  
+
       - name: Install Render CLI
         run: |
-          curl -o render https://render.com/static/render-cli-linux
-          chmod +x render
-          sudo mv render /usr/local/bin/
-  
-      - name: Configure Render CLI
-        run: render configure --api-key ${{ secrets.RENDER_TOKEN }}
-  
-      - name: Deploy to Render
-        run: render deploy --image atallah0/backend-final-4-app:latest
+          curl -fsSL https://api.github.com/repos/render/cli/releases/latest/download/render-cli-linux-amd64.zip | tar -xf -
+          mv render-cli /usr/local/bin
+
+      - name: Login to Render
+        run: render login
+
+      - name: Update Render Deployment
+        id: update
+        run: |
+          render update <DEPLOYMENT_ID> \
+            --image atillah0/backend-final-4-app:latest \
+            --env-file .env
+        env:
+          DEPLOYMENT_ID: ${{ secrets.RENDER_DEPLOYMENT_ID }}
