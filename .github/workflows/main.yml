@@ -13,11 +13,6 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '14'
-
       - name: Install Render CLI
         run: |
           curl -o render https://render.com/static/render-cli-linux
