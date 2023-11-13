@@ -24,4 +24,3 @@ jobs:
   
       - name: Deploy to Render
         run: render deploy --image atallah0/backend-final-4-app:latest
-
