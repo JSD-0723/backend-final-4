@@ -20,7 +20,7 @@ jobs:
           sudo mv render /usr/local/bin/
   
       - name: Configure Render CLI
-        run: render configure --api-token ${{ secrets.RENDER_TOKEN }}
+        run: render configure --api-key ${{ secrets.RENDER_TOKEN }}
   
       - name: Deploy to Render
         run: render deploy --image atallah0/backend-final-4-app:latest
