@@ -24,11 +24,7 @@ jobs:
           chmod +x render
           sudo mv render /usr/local/bin/
 
-      - name: Update Render Deployment
-        id: update
+      - name: Deploy to Render
         run: |
-          DEPLOYMENT_ID="43ca597" ./node_modules/.bin/render update $DEPLOYMENT_ID \
-            --image atillah0/backend-final-4-app:latest \
-            --env-file .env
-        env:
-          DEPLOYMENT_ID: ${{ secrets.RENDER_DEPLOYMENT_ID }}
+          render login --api-key ${{ secrets.RENDER_TOKEN }}
+          render deploy --image atallah0/backend-final-4-app:${{ steps.meta.outputs.tags }} --config docker-compose.app.yaml --engine none
