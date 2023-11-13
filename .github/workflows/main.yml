@@ -13,13 +13,18 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
 
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
       - name: Install Render CLI
         run: npm install render-cli
 
       - name: Update Render Deployment
         id: update
         run: |
-          DEPLOYMENT_ID="43ca597" render update $DEPLOYMENT_ID \
+          DEPLOYMENT_ID="43ca597" ./node_modules/.bin/render update $DEPLOYMENT_ID \
             --image atillah0/backend-final-4-app:latest \
             --env-file .env
         env:
