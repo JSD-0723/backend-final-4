@@ -19,7 +19,7 @@ jobs:
       - name: Update Render Deployment
         id: update
         run: |
-          render update <DEPLOYMENT_ID> \
+          DEPLOYMENT_ID="43ca597" render update $DEPLOYMENT_ID \
             --image atillah0/backend-final-4-app:latest \
             --env-file .env
         env:
