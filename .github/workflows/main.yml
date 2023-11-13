@@ -22,5 +22,6 @@ jobs:
           DEPLOYMENT_ID="43ca597" render update $DEPLOYMENT_ID \
             --image atillah0/backend-final-4-app:latest \
             --env-file .env
+            --engine liquid
         env:
           DEPLOYMENT_ID: ${{ secrets.RENDER_DEPLOYMENT_ID }}
