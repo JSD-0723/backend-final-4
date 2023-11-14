@@ -29,53 +29,17 @@ express-app/
 |
 ├── controllers/             # Route Controllers for the application
 │   ├── index.js
-|   ├── addressController.js
-|   ├── brandController.js
-|   ├── cartController.js
-|   ├── categoryController.js
-|   ├── discountController.js
-|   ├── index.js
-|   ├── orderController.js
-|   ├── paymentController.js
-|   ├── productController.js
-|   ├── ratingReviewController.js
-|   ├── userController.js
 |
 ├── middlewares/             # Route middlewares for the application
 │   ├── index.js
-│   ├── async.js
-│   ├── error-Handler.js
-│   ├── not-Found.js
 |
 ├── models/                  # Models for the application
-│   ├── addressModel.js
-│   ├── brandModel.js
-│   ├── cartItemModel.js
-│   ├── cartModel.js
-│   ├── categoryModel.js
-│   ├── dscountModel.js
 │   ├── index.js
-│   ├── orderItemModel.js
-│   ├── orderModel.js
-│   ├── paymentModel.js
-│   ├── productModel.js
-│   ├── ratingReviewModel.js
-│   ├── userModel.js
 |
 ├── routes/                  # Route handlers for the application
 │   ├── index.js
-│   ├── userRoutes.js
-│   ├── addressRouts.js
-│   ├── productRoutes.js
-│   ├── categoryRouts.js
-│   ├── brandRoutes.js
-│   ├── discountRoutes.js
-│   ├── cartRoutes.js
-│   ├── orderRoutes.js
-│   ├── paymentRoutes.js
-│   ├── ratingReviewRoutes.js
 │
-├── seeders/                 # Seeder functions for the adding data into database
+├── seeders/                 # Seeder functions for adding data to database
 │   ├── index.js
 |
 ├── validators/              # Validators for the application
@@ -83,7 +47,6 @@ express-app/
 │
 ├── utils/                   # Helper functions for the application
 │   ├── index.js
-│   ├── dataBaseConnection.js
 │   ├── constants/           # Helper data seeders for filling the database with data
 |   |   ├── userSeeder.js
 │   ├── errors/              # Helper module/functions for handling errors across the application
@@ -138,16 +101,32 @@ Please check the API documentation for more information:
 ## Technologies
 
 - Environment: **NodeJs**
+  
 - Framework: **Express**
+  
 - ORM: **Sequelize**
+  
 - DataBase: **MySql**
+  
 - Validations: **express-validator**
+  
+- Authentication:
+  * **JsonWebToken(JWT)**
+  * **Passport**
+  * **Passport-jwt**
+
 - Developer tools and libraries:
   * **nodemon**
   * **dotenv**
   * **bcrypt**
+  * **CORS**
+
 - Testing:
   * **Postman**
+  * **Jest**
+  * **Sequelize-mock**
+- Code Design:
+  * **ESLint**
 
 ## Links
 
