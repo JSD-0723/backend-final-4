@@ -101,16 +101,32 @@ Please check the API documentation for more information:
 ## Technologies
 
 - Environment: **NodeJs**
+  
 - Framework: **Express**
+  
 - ORM: **Sequelize**
+  
 - DataBase: **MySql**
+  
 - Validations: **express-validator**
+  
+- Authentication:
+  * **JsonWebToken(JWT)**
+  * **Passport**
+  * **Passport-jwt**
+
 - Developer tools and libraries:
   * **nodemon**
   * **dotenv**
   * **bcrypt**
+  * **CORS**
+
 - Testing:
   * **Postman**
+  * **Jest**
+  * **Sequelize-mock**
+- Code Design:
+  * **ESLint**
 
 ## Links
 
