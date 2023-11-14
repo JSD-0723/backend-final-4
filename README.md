@@ -154,7 +154,11 @@ Please check the API documentation for more information:
 - **DBschema** : [schema](https://drive.google.com/file/d/1oMzvGsL2REHWoVoemKOW1zyfqvW1-OLJ/view?usp=drive_link)
 - **API Sheet** : [sheet](https://docs.google.com/spreadsheets/d/1-MVTv1j3o96PzLa1DHij-6f5ijhFKIS6_ImvOv748N4/edit?usp=drive_link)
 - **Google Drive** : [drive](https://drive.google.com/drive/folders/1Lor5PbsP_AoPMgC3iBY-ycuXpwMZ57ZD?usp=drive_link)
-
+- **Deployment Link** :
+  * Main : [WebService URL](https://final-project-rk77.onrender.com/)
+  * Back Up : [WebService URL](https://e-commerce.cleverapps.io/)
+- **Frontend Repository** : [Repository](https://github.com/JSD-0723/frontend-final-4-new.git)
+- **Frontend Deployment** : [Website](https://jsd-0723.github.io/frontend-final-4-new/)
 ## Contributing
 
 Contributions to this project are welcome! If you'd like to contribute, please follow these guidelines:
