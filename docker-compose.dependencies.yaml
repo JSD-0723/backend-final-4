@@ -15,7 +15,7 @@ services:
     networks:
       - backend-final
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "phpmyadmin" ]
+      test: [ "CMD", "mysqladamin", "ping", "-h", "phpmyadmin" ]
       timeout: 40s
       retries: 10
       interval: 5s
