@@ -1,25 +1,25 @@
-# deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-final-app
-  namespace: final-app
+  name: app-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: backend-final-app
+      app: my-app
   template:
     metadata:
       labels:
-        app: backend-final-app
+        app: my-app
     spec:
       containers:
-        - name: backend-final-app
+        - name: my-app
           image: atallah0/backend-final-4-app:latest
+          ports:
+            - containerPort: 5000
           env:
             - name: DB_HOST
-              value: "bpjdtcusvfya081dups9-mysql.services.clever-cloud.com"
+              value: "bpjdtcusvfya081dups9-mysql.services.clever-cloud.com"  #
             - name: DB_USER
               value: "ue1nqowcpn0mvluj"
             - name: DB_PASSWORD
@@ -28,18 +28,3 @@ spec:
               value: "bpjdtcusvfya081dups9"
             - name: JWT_SECRET
               value: "jwtS$12345er"
-          ports:
-            - containerPort: 8080
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: backend-final-service
-# spec:
-#   selector:
-#     app: backend-final-app
-#   ports:
-#     - protocol: TCP
-#       port: 80
-#       targetPort: 5000
-#   type: LoadBalancer
